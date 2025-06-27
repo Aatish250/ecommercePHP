@@ -12,9 +12,11 @@
 
     <?php
 
+    session_start();
     $active_page = 1;
     include '../components/user_nav.php';
-
+    include '../components/flashMessage.php';
+    require '../config/db.php';
     ?>
 
     <section class="container mx-auto">
@@ -40,125 +42,115 @@
                                 Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr>
-                            <td class="pl-3">
-                                <!-- From Uiverse.io by themrsami -->
-                                <div class="">
-                                    <label class="text-white">
-                                        <input
-                                            class="transition-all duration-500 ease-in-out dark:hover:scale-110 w-4 h-4"
-                                            type="checkbox">
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="pl-2 w-24 h-24">
-                                <img src="https://picsum.photos/500" alt="https://picsum.photos/500"
-                                    class="object-cover rounded-md">
-                            </td>
-                            <td class="p-2 font-medium text-gray-900">
-                                Item #1
-                            </td>
-                            <td class="text-sm text-gray-500 text-center">
-                                $1,299.99
-                            </td>
-                            <td class="whitespace-nowrap">
-                                <div class="flex justify-center">
-                                    <input type="number" name="new_stock" value="5" min="0"
-                                        class="w-12 py-1 border border-gray-300 rounded text-center">
-                                </div>
-                            </td>
-                            <td class="text-sm text-gray-500 text-center">
-                                $1,299.99
-                            </td>
-                            <td class="whitespace-nowrap text-sm font-medium text-center">
-                                <form method="POST" class="inline"
-                                    onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                    <input type="hidden" name="product_id" value="">
-                                    <button type="submit" name="update_stock"
-                                        class="px-3 py-2 rounded-md text-blue-500 bg-blue-200 hover:bg-red-00 hover:text-white hover:bg-blue-500">
-                                        Update
-                                    </button>
-                                    <button type="submit" name="delete_product"
-                                        class="px-3 py-2 rounded-md text-red-500 bg-red-200 hover:bg-red-00 hover:text-white hover:bg-red-500">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="pl-3">
-                                <!-- From Uiverse.io by themrsami -->
-                                <div class="">
-                                    <label class="text-white">
-                                        <input
-                                            class="transition-all duration-500 ease-in-out dark:hover:scale-110 w-4 h-4"
-                                            type="checkbox">
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="pl-2 w-24 h-24">
-                                <img src="https://picsum.photos/500" alt="https://picsum.photos/500"
-                                    class="object-cover rounded-md">
-                            </td>
-                            <td class="p-2 font-medium text-gray-900">
-                                Item #1
-                            </td>
-                            <td class="text-sm text-gray-500 text-center">
-                                $1,299.99
-                            </td>
-                            <td class="whitespace-nowrap">
-                                <div class="flex justify-center">
-                                    <input type="number" name="new_stock" value="5" min="0"
-                                        class="w-12 py-1 border border-gray-300 rounded text-center">
-                                </div>
-                            </td>
-                            <td class="text-sm text-gray-500 text-center">
-                                $1,299.99
-                            </td>
-                            <td class="whitespace-nowrap text-sm font-medium text-center">
-                                <form method="POST" class="inline"
-                                    onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                    <input type="hidden" name="product_id" value="">
-                                    <button type="submit" name="update_stock"
-                                        class="px-3 py-2 rounded-md text-blue-500 bg-blue-200 hover:bg-red-00 hover:text-white hover:bg-blue-500">
-                                        Update
-                                    </button>
-                                    <button type="submit" name="delete_product"
-                                        class="px-3 py-2 rounded-md text-red-500 bg-red-200 hover:bg-red-00 hover:text-white hover:bg-red-500">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                    <tbody id="table-body" class="bg-white divide-y divide-gray-200">
+
                     </tbody>
-                    <tfoot>
-                        <tr class="text-right">
-                            <td colspan="2" class="whitespace-nowrap text-sm font-medium text-center">
-                                <button type="submit" name="update_stock"
-                                    class="px-3 py-2 my-3 mx-1 rounded-md text-gray-500 bg-gray-200 hover:bg-gray-00 hover:text-white hover:bg-gray-500">
-                                    Delete Marked
-                                </button>
-                            </td>
-                            <td colspan="3" class="text-lg">
-                                Total
-                            </td>
-                            <td class="text-lg text-gray-700">
-                                $1299.99
-                            </td>
-                            <td class="whitespace-nowrap text-sm font-medium text-center">
-                                <button type="submit" name="update_stock"
-                                    class="px-3 py-2 my-3 mx-1 rounded-md text-green-500 bg-green-200 hover:bg-red-00 hover:text-white hover:bg-green-500">
-                                    Procced to Checkout
-                                </button>
-                            </td>
-                        </tr>
-                    </tfoot>
+                    <?php
+                    // include 'proccess/cart_table.php';
+                    ?>
                 </table>
             </div>
         </div>
     </section>
+    <script>
+        $(document).ready(() => {
+            printData(true);
 
+            $("#table-body").on('click', 'button[name="update_quantity"]', function () {
+                alert("Clicked update_quantity")
+            });
+
+            $("#table-body").on('click', 'button[name="procced_checkout"]', function () {
+                alert("Clicked procced-checkout")
+            });
+
+        });
+
+        function printData(status) {
+            if (status) {
+                $("#table-body").load('proccess/cart_table.php', function () {
+                    $("#table-body").find("button[name='update_quantity']").hide();
+                });
+            } else {
+                $("#table-body").text("Error fetching data");
+            }
+        }
+
+        // on stock change (show and hide updat btn)
+        $("#table-body").on('change', "input[name='new_quantity']", function () {
+
+            // console.log($(this).val());
+            changeInput = $(this);
+            row = changeInput.closest("tr");
+            db_stock = row.find("input[name = 'previous_quantity']");
+            updateBtn = row.find("button[name = 'update_quantity']");
+
+            if (changeInput.val() != db_stock.val()) {
+                updateBtn.show(300);
+                // console.log("SHow");
+            }
+            else {
+                updateBtn.hide(300);
+                // console.log("hide");
+            }
+            // console.log(changeInput.val());
+        });
+
+        // -------- for delete button start
+        // delete data
+        $("#table-body").on('click', "button[name='delete_from_cart']", function () {
+            const $clickButton = $(this);
+            const $row = $clickButton.closest('tr');
+            const productId = $row.data("product-id");
+            // console.log(productId, newStock);
+
+            $.ajax({
+                url: 'proccess/cart_table.php',
+                method: 'POST',
+                data: {
+                    delete_product_id: productId
+                },
+                success: function () {
+                    printData(true);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Delete Error:", status, error);
+                    alert("Failed to delete product. Please try again.");
+                    setFlashMessage("fail", "Error deleting");
+                }
+            });
+        });
+        // -------- for delete button end
+
+        // -------- for update button start
+        // update data
+        $("#table-body").on('click', "button[name='update_from_cart']", function () {
+            const $clickButton = $(this);
+            const $row = $clickButton.closest('tr');
+            const productId = $row.data("product-id");
+            const newStock = $row.find("input[name='new_quantity']").val();
+            // console.log(productId, newStock);
+
+            $.ajax({
+                url: 'proccess/cart_table.php',
+                method: 'POST',
+                data: {
+                    update_product_id: productId,
+                    new_stock_value: newStock
+                },
+                success: function () {
+                    printData(true);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Delete Error:", status, error);
+                    alert("Failed to update product. Please try again.");
+                    setFlashMessage("fail", "Error updating");
+                }
+            });
+        });
+        // -------- for update button end
+
+    </script>
 </body>
 
 </html>
