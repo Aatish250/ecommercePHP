@@ -187,7 +187,8 @@
                     }
                 });
             });
-
+            // -------- for update button end
+            
             // on stock change (show and hide updat btn)
             $("#table-body").on('change', "input[name='new_stock']", function () {
 
