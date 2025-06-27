@@ -19,7 +19,7 @@ if (isset($_POST['add_to_cart'])) {
     } else {
         echo "Inserting";
         $_SESSION['message'] = "Adding to Cart";
-        $insertSql = "INSERT INTO cart (user_id, product_id, quantity) VALUES ($quantity,$product_id,$user_id)";
+        $insertSql = "INSERT INTO cart (user_id, product_id, quantity) VALUES ($user_id,$product_id,$quantity)";
     }
 
     $sendResult = mysqli_query($conn, $insertSql);
