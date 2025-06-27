@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- homepage.php -->
 
 <head>
     <meta charset="UTF-8">
@@ -47,32 +48,13 @@
                 </div>
             </div>
             <script>
-                $(document).ready(function () {
 
-                    // load all the catgory options
-                    console.log("<?php echo isset($_SESSION['previous-category']) ? $_SESSION['previous-category'] : ' documet.ready() no precious-category data'; ?>");
-                    console.log("<?php echo isset($_SESSION['previous-search']) ? $_SESSION['previous-search'] : ' documet.ready() no precious-search data'; ?>");
-                    $("#category-select").load('proccess/home_products.php', { showOption: true, previousCategory: '<?php echo isset($_SESSION['previous-category']) ? $_SESSION['previous-category'] : ''; ?>' });
-
-                    // feature to search data dinamically
-                    $category = $("#category-select").val();
-                    $search = $("#search-bar").val();
-
-                    $("#category-select").on('change', function () {
-                        printData(true);
-                    });
-                    $("#search-bar").on('keyup', function () {
-                        printData(true);
-                    });
-
-                });
-
-                // setFlashMessage('fail', 'Message');
             </script>
     </section>
     <?php
-    echo isset($_SESSION['previous-search']) ? $_SESSION['previous-search'] : 'no precious-search';
-    echo isset($_SESSION['previous-category']) ? $_SESSION['previous-category'] : 'no precious-category';
+    // echo isset($_SESSION['previous-search']) ? $_SESSION['previous-search'] : 'no precious-search';
+    // echo isset($_SESSION['previous-category']) ? $_SESSION['previous-category'] : 'no precious-category';
+    // echo isset($_SESSION['message-status']) ? $_SESSION['message-status'] : 'no precious-status';
     ?>
     <section class="mx-auto">
         <!-- product grids -->
@@ -90,13 +72,43 @@
         if (status) {
             $category = $("#category-select").val();
             $search = $("#search-bar").val();
-            console.log("sending data category:" + $category + " Search:" + $search);
-            <?php session_unset(); ?>
+            console.log("fetching data category:" + $category);
+            console.log("fetching data Search:" + $search);
+
             $("#product-grid").load('proccess/home_products.php', { showData: status, category: $category, search: $search });
         }
+
+        <?php
+        if (isset($_SESSION['message-status']) && isset($_SESSION['message'])) {
+            echo "setFlashMessage('" . $_SESSION['message-status'] . "','" . $_SESSION['message'] . "')";
+        }
+        ?>
     }
 
-    printData(true);
+    $(document).ready(function () {
+
+        // load all the catgory options
+        $previousCategory = '<?php echo htmlspecialchars(isset($_SESSION['previous-category'])) ? htmlspecialchars($_SESSION['previous-category']) : ''; ?>';
+        $("#category-select").load('proccess/home_products.php', { showOption: true, previousCategory: $previousCategory }, function () {
+            console.log("Category options loaded. Triggering initial product grid load.");
+            // After categories are loaded and selected, then load the product grid
+            printData(true);
+        });
+
+        // feature to search data dinamically
+        $category = $("#category-select").val();
+        $search = $("#search-bar").val();
+
+
+        $("#category-select").on('change', function () {
+            printData(true);
+        });
+        $("#search-bar").on('keyup', function () {
+            printData(true);
+        });
+
+    });
 </script>
+<?php session_unset(); ?>
 
 </html>

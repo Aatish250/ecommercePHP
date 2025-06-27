@@ -1,5 +1,5 @@
 <?php
-
+//home_products.php
 require '../../config/db.php';
 
 // this is for showing all category options
@@ -7,11 +7,12 @@ if (isset($_POST['showOption']) && $_POST["showOption"]) {
 
     echo "<option value=''>All Category</option>";
     $previousOption = $_POST['previousCategory'];
+
     $optionResult = mysqli_query($conn, "SELECT DISTINCT category FROM products;");
     while ($option = mysqli_fetch_assoc($optionResult)) {
         echo "<option ";
-        if ($option['category'] == $_POST['previousCategory'])
-            echo "selected";
+        if ($option['category'] == $previousOption)
+            echo "value='$previousOption' selected";
         echo ">";
         echo $option['category'] . "</option>";
     }
@@ -66,7 +67,7 @@ if (isset($_POST['showData']) && $_POST["showData"]) {
                     <span class='text-xl font-bold text-indigo-600'>
                     Rs. $product_price
                     </span>
-                    <a href='product_detail.php?id=$product_id&search=$search&previous-category=$selectedCategory'
+                    <a href='product_detail.php?product_id=$product_id&search=$search&previous-category=$selectedCategory'
                     class='bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors'>
                     View Details
                     </a>
@@ -76,5 +77,6 @@ if (isset($_POST['showData']) && $_POST["showData"]) {
             ";
         }
     }
+    // session_unset();
 }
 ?>
