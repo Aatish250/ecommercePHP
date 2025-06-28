@@ -56,10 +56,6 @@
         $(document).ready(() => {
             printData(true);
 
-            $("#table-body").on('click', 'button[name="update_quantity"]', function () {
-                alert("Clicked update_quantity")
-            });
-
             $("#table-body").on('click', 'button[name="procced_checkout"]', function () {
                 alert("Clicked procced-checkout")
             });
@@ -68,8 +64,9 @@
 
         function printData(status) {
             if (status) {
-                $("#table-body").load('proccess/cart_table.php', function () {
-                    $("#table-body").find("button[name='update_quantity']").hide();
+                $("#table-body").load('proccess/cart_table.php', { show_data: status }, function () {
+                    $("#table-body").find("button[name = 'update_from_cart']").hide();
+                    $("button[name='delete_marked']").hide();
                 });
             } else {
                 $("#table-body").text("Error fetching data");
@@ -83,15 +80,15 @@
             changeInput = $(this);
             row = changeInput.closest("tr");
             db_stock = row.find("input[name = 'previous_quantity']");
-            updateBtn = row.find("button[name = 'update_quantity']");
+            updateBtn = row.find("button[name = 'update_from_cart']");
 
             if (changeInput.val() != db_stock.val()) {
                 updateBtn.show(300);
-                // console.log("SHow");
+                console.log("SHow");
             }
             else {
                 updateBtn.hide(300);
-                // console.log("hide");
+                console.log("hide");
             }
             // console.log(changeInput.val());
         });
@@ -149,6 +146,87 @@
             });
         });
         // -------- for update button end
+
+
+
+        // ---- mulit item selection
+        cartIdSelections = [];
+
+        $("#table-body").on("click", "input[name='selection']", function () {
+            // showChecks();
+
+            selectedValues = [];
+            checkedBoxs = $("input[name='selection']:checked");
+
+            checkedBoxs.each(function () {
+                selectedValues.push($(this).data("cart-id"));
+            });
+            $("input[name='selected_cart_id']").val(selectedValues);
+
+            userId = 1;
+
+            console.log(selectedValues);
+
+            $row = $("#last-row");
+            markedIds = selectedValues.join(",");;
+
+            // ---- to get the details start ----
+
+            $.get('proccess/cart_table.php', { get_cart_detail: true, marked_ids: markedIds, get_total_cart_price: true }, function (data, status) {
+                if (status === 'success') {
+                    $row.find("#total_price").text("Rs. " + data);
+                } else {
+                    $row.find("#total_price").text('<p style="color: red;">Error fetching data.</p>');
+                    console.error('AJAX GET Error:', status);
+                }
+            });
+
+            $.get('proccess/cart_table.php', { get_cart_detail: true, marked_ids: markedIds, get_total_cart_quantity: true }, function (data, status) {
+                if (status === 'success') {
+                    $row.find("#total_quantity").text(data);
+                } else {
+                    $row.find("#total_price").text('<p style="color: red;">Error fetching data.</p>');
+                    console.error('AJAX GET Error:', status);
+                }
+            });
+
+            // ---- to get the details end ----
+
+            // script to show and hide butotn on check marks
+            if (selectedValues.length > 0) {
+                $("button[name='delete_marked']").show(300);
+
+            } else {
+                $("button[name='delete_marked']").hide(300);
+            }
+
+
+        });
+
+        // on Delete_Marked button click
+        $("#table-body").on('click', "button[name='delete_marked']", function () {
+            markedIds = selectedValues.join(",");
+            console.log("Deleted: ", markedIds);
+
+            // to delete selected
+            deleteFromCart(true, markedIds);
+        });
+
+        selectedValues = [];
+        function showChecks() {
+        }
+
+        function deleteFromCart(status, ids) {
+            $.post('proccess/cart_table.php', { delete_selected_cart: true, marked_ids: markedIds }, function (data, status) {
+                if (status === 'success') {
+                    console.log("--Delete--", data);
+                    printData(true);
+                } else {
+                    $row.find("#total_price").text('<p style="color: red;">Error fetching data.</p>');
+                    console.error('AJAX GET Error:', status);
+                }
+            });
+        }
 
     </script>
 </body>
