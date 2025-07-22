@@ -13,6 +13,115 @@
     include '../components/user_nav.php';
     include '../components/flashMessage.php';
     require '../config/db.php';
+    
+    $user_id = "1"; // to be changed later
+    $user_username = "Aatish"; // to be changed later
+    $user_email = "machamasi321@gmail.com"; // to be changed later
+    $user_phone = "9800000000"; // to be changed later
+    $user_shipping_address = "Kathmandu, Nepal"; // to be changed later
+    if(isset($_GET['selected_cart_ids'])){
+        $selected_cart_id = $_GET['selected_cart_ids'];
+        $whereClause = " AND cart_id IN ($selected_cart_id)";
+        echo "Selected Cart ID: ".$selected_cart_id;
+    }else{
+        $whereClause = "";
+    }
+
+    $cartQuery = "SELECT * FROM cart_details WHERE user_id = $user_id $whereClause";
+    
+
+    $subtotal = 0;
+
+    $cartResult = mysqli_query($conn, $cartQuery);
+
+    if(!mysqli_num_rows($cartResult)) {
+        header ("Location: cart.php");
+        exit();
+    }
+
+    // to verify if there is any data found
+    while($row = mysqli_fetch_assoc($cartResult)){
+        $cart_items[] = $row;
+    }
+    
+    // Calculate totals
+    $subtotal = 0;
+    foreach ($cart_items as $item) {
+        $subtotal += $item['product_price'] * $item['quantity'];
+    }
+
+    $shipping_fee = $subtotal > 1000 ? 0 : 10; // Free shipping over $100
+    $total = $subtotal + $shipping_fee;
+    
+    
+    // interact with the database
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $shipping_address = $_POST['shipping_address'];
+        $phone = $_POST['phone'];
+        $payment_method = $_POST['payment_method'];
+        $notes = $_POST['notes'] ?? '';
+        
+        echo "<br>Placed Order Details:<br><pre>";
+        echo $shipping_address;
+        echo $phone;
+        echo $payment_method;
+        echo $notes;
+
+            
+            // Create order
+            $orderQuery = "INSERT INTO orders (uid, total, shipping_address, phone, payment_method, notes, status) 
+                           VALUES ('$user_id', '$total', '$shipping_address', '$phone', '$payment_method', '$notes', 'pending')";
+            
+            
+            $resultOrderQuery = mysqli_query($conn, $orderQuery);
+            
+            $order_id = mysqli_insert_id($conn);
+            
+            // Add order items
+            foreach ($cart_items as $item) {
+                $product_id = $item['product_id'];
+                $quantity = $item['quantity'];
+                $product_price = $item['product_price'];
+                
+                $orderItemQuery = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ('$order_id', '$product_id', '$quantity', '$product_price')";
+                $resultOrderItemQuery = mysqli_query($conn, $orderItemQuery);
+                // Update product stock
+                $updateStockQuery = "UPDATE products SET stock = stock - $quantity WHERE product_id = $product_id";
+                $resultUpdateStockQuery = mysqli_query($conn, $updateStockQuery);
+            }
+            
+            // Clear cart
+            $clearCartQuery = "DELETE FROM cart WHERE user_id = $user_id $whereClause";
+            $resultClearCartQuery = mysqli_query($conn, $clearCartQuery);
+            
+            if($resultOrderQuery &&$resultOrderItemQuery && $resultUpdateStockQuery && $resultClearCartQuery){
+                $_SESSION['message-status'] = 'success';
+                $_SESSION['message-'] = "Order placed successfully";
+                if ($payment_method === 'khalti') {
+                    // Redirect to Khalti payment
+                    header("Location: khalti-payment.php?order_id=$order_id");
+                } else {
+                    // Redirect to order confirmation
+                    header("Location: order-confirmation.php?order_id=$order_id");
+                }
+                // exit();
+            }else{
+                $_SESSION['message-status'] = 'fail';
+                $_SESSION['message-'] = "Order placement failed";
+            }
+            echo "<br>Order ID: ".$order_id."</pre><br>";
+            
+    }
+    ?>
+
+    <?php
+    if (isset($_SESSION['message-status']) && isset($_SESSION['message'])) {
+        ?>
+        <script>
+            setFlashMessage("<?php echo $_SESSION['message-status'] ?>", "<?php echo $_SESSION['message'] ?>");
+        </script>
+        <?php
+    }
     ?>
 
     <div class="max-w-6xl mx-auto px-4 py-8">
@@ -21,10 +130,6 @@
         </div>
 
         <h1 class="text-3xl font-bold text-gray-800 mb-2">Checkout</h1>
-        <?php //$error_message = "This is a test error message"; ?>
-        <script>
-            setFlashMessage("fail", "<?php echo $error_message; ?>");
-        </script>
             
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Checkout Form -->
@@ -38,12 +143,12 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                                <input type="text" value="<?php //echo htmlspecialchars($user['name']); ?>" readonly
+                                <input type="text" value="<?php echo htmlspecialchars($user_username); ?>" readonly
                                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                                <input type="email" value="<?php //echo htmlspecialchars($user['email']); ?>" readonly
+                                <input type="email" value="<?php echo htmlspecialchars($user_email); ?>" readonly
                                        class="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
                             </div>
                         </div>
@@ -54,6 +159,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
                         <input type="tel" name="phone" required
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                               value="<?php echo htmlspecialchars($user_phone); ?>"
                                placeholder="Enter your phone number">
                     </div>
 
@@ -62,7 +168,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Shipping Address *</label>
                         <textarea name="shipping_address" rows="4" required
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                  placeholder="Enter your complete shipping address"></textarea>
+                                  placeholder="Enter your complete shipping address"><?php echo htmlspecialchars($user_shipping_address); ?></textarea>
                     </div>
 
                     <!-- Payment Method -->
@@ -113,6 +219,10 @@
                                   placeholder="Any special instructions for your order"></textarea>
                     </div>
 
+                    <!-- <a type="submit" href="order-confirmation.php"
+                            class="w-full bg-indigo-600 text-white py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors font-semibold">
+                        Place Order
+                    </a> -->
                     <button type="submit" 
                             class="w-full bg-indigo-600 text-white py-3 px-6 rounded-lg hover:bg-indigo-700 transition-colors font-semibold">
                         Place Order
@@ -126,55 +236,44 @@
                 
                 <!-- Order Items -->
                 <div class="space-y-4 mb-6">
-                    <?php //foreach ($cart_items as $item): ?>
+                    <?php foreach ($cart_items as $item): ?>
                         <div class="flex items-center space-x-4">
-                            <img src="https://picsum.photos/200<?php //echo $item['image'] ?: '/placeholder.svg?height=60&width=60'; ?>" 
-                                 alt="<?php //echo htmlspecialchars($item['name']); ?>" 
+                            <img src="<?php echo '../img/product/'.$item['image']; ?>" 
+                                 alt="<?php echo htmlspecialchars($item['product_name']); ?>" 
                                  class="w-16 h-16 object-cover rounded">
                             <div class="flex-1">
-                                <h3 class="font-medium text-gray-800"><?php echo "Title Here";//htmlspecialchars($item['name']); ?></h3>
-                                <p class="text-gray-600">Qty: <?php echo 10;//$item['quantity']; ?></p>
+                                <h3 class="font-medium text-gray-800"><?php echo htmlspecialchars($item['product_name']); ?></h3>
+                                <p class="text-gray-600">Qty: <?php echo $item['quantity']; ?></p>
                             </div>
                             <div class="text-right">
                                 <p class="font-semibold text-gray-800">
-                                    $<?php echo 20;//number_format($item['price'] * $item['quantity'], 2); ?>
+                                    $<?php echo number_format($item['product_price'] * $item['quantity'], 2); ?>
                                 </p>
                             </div>
                         </div>
-                    <?php //endforeach; ?>
+                    <?php endforeach; ?>
                 </div>
 
                 <!-- Order Totals -->
                 <div class="border-t pt-4 space-y-2">
                     <div class="flex justify-between">
                         <span class="text-gray-600">Subtotal</span>
-                        <span class="text-gray-800">$<?php echo number_format(20.889, 2);//number_format($subtotal, 2); ?></span>
+                        <span class="text-gray-800">$<?php echo number_format($subtotal, 2); ?></span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-600">Shipping</span>
                         <span class="text-gray-800">
-                            <?php echo 10; ?>
-                            <?php //echo $shipping_fee > 0 ? '$' . number_format($shipping_fee, 2) : 'Free'; ?>
+                            <?php echo $shipping_fee > 0 ? '$' . number_format($shipping_fee, 2) : 'Free'; ?>
                         </span>
                     </div>
-                    <?php //if ($shipping_fee == 0 && $subtotal > 100): ?>
+                    <?php if ($shipping_fee == 0 && $subtotal > 100): ?>
                         <div class="text-sm text-green-600">
                             🎉 You qualify for free shipping!
                         </div>
-                    <?php //endif; ?>
+                    <?php endif; ?>
                     <div class="flex justify-between text-lg font-semibold border-t pt-2">
                         <span>Total</span>
-                        <span class="text-indigo-600">$<?php echo number_format(30.889, 2);//number_format($total, 2); ?></span>
-                    </div>
-                </div>
-
-                <!-- Security Notice -->
-                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                        </svg>
-                        <span class="text-sm text-gray-600">Your order is secured with SSL encryption</span>
+                        <span class="text-indigo-600">$<?php echo number_format($total, 2); ?></span>
                     </div>
                 </div>
             </div>
