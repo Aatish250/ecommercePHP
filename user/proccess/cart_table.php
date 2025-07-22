@@ -211,7 +211,7 @@ if (isset($_POST['show_data'])) {
             ?>
 
 
-            <td colspan="4" class="">
+            <td colspan="2" class="">
                 <div class="ml-5">
                     <button type="submit" name="delete_marked"
                         class="px-3 py-2 my-3 mx-1 rounded-md text-gray-500 bg-gray-200 hover:bg-gray-00 hover:text-white hover:bg-gray-500">
@@ -220,7 +220,7 @@ if (isset($_POST['show_data'])) {
                     <input type="hidden" class="bg-blue-200 p-2" name="selected_cart_id">
                 </div>
             </td>
-            <td class="text-lg pr-3">
+            <td colspan="2" class="text-lg pr-3 text-right">
                 Total
             </td>
             <td class="text-lg">
@@ -229,15 +229,14 @@ if (isset($_POST['show_data'])) {
                     <span class="text-sm text-gray-400">Item</span>
                 </div>
             </td>
-            <td class="text-gray-700">
+            <td colspan="2" class="text-gray-700">
                 <div class="flex flex-col -space-y-2">
                     <span id="total_price" class="text-lg font-bold mx-auto">Rs.
                         <?php echo $cartDetail['total_cart_price'] ?></span>
-                    <button type="submit" name="procced_checkout"
-                        class="px-3 py-2 my-3 mx-auto bg-blue-300 rounded-md text-green-500 bg-green-200 hover:bg-red-00 hover:text-white hover:bg-green-500">
+                    <a type="submit" id="procced_checkout" href="checkout.php"
+                        class="px-3 py-2 my-3 mx-auto text-nowrap bg-blue-300 rounded-md text-green-500 bg-green-200 hover:bg-red-00 hover:text-white hover:bg-green-500">
                         Procced to Checkout
-                    </button>
-                </div>
+                    </a>
             </td>
 
             <?php

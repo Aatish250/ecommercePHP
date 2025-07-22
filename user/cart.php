@@ -200,7 +200,9 @@
                 $("button[name='delete_marked']").hide(300);
             }
 
-
+            // scrpt to change href for procced_checkout
+            $("#procced_checkout").attr('href', "checkout.php?marked_ids=".markedIds);
+            console.log(markedIds)
         });
 
         // on Delete_Marked button click
