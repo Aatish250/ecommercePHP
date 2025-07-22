@@ -150,7 +150,7 @@
 
 
         // ---- mulit item selection
-        cartIdSelections = [];
+        // cartIdSelections = [];
 
         $("#table-body").on("click", "input[name='selection']", function () {
             // showChecks();
@@ -168,7 +168,9 @@
             console.log(selectedValues);
 
             $row = $("#last-row");
-            markedIds = selectedValues.join(",");;
+            markedIds = selectedValues.join(",");
+
+
 
             // ---- to get the details start ----
 
@@ -199,10 +201,12 @@
             } else {
                 $("button[name='delete_marked']").hide(300);
             }
+            
 
             // scrpt to change href for procced_checkout
-            $("#procced_checkout").attr('href', "checkout.php?marked_ids=".markedIds);
+            $("#procced_checkout").attr('href', "checkout.php?selected_cart_ids="+markedIds);
             console.log(markedIds)
+
         });
 
         // on Delete_Marked button click
