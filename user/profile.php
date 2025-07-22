@@ -1,3 +1,13 @@
+
+<?php
+    session_start();
+    require '../config/db.php';
+    $user_id = "1";
+
+    $userResult = mysqli_query($conn, "Select * from users where user_id = $user_id");
+    $user = mysqli_fetch_assoc($userResult);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,16 +37,16 @@
                         <div class="space-y-3">
                             <div>
                                 <label class="block text-sm font-medium text-gray-600">Name</label>
-                                <p class="text-gray-800">Username</p>
+                                <p class="text-gray-800"><?php echo $user['username']; ?></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-600">Email</label>
-                                <p class="text-gray-800">user@example.com</p>
+                                <p class="text-gray-800"><?php echo $user['email']; ?></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-600">Member Since</label>
                                 <p class="text-gray-800">
-                                    June 19, 2025
+                                    <?php echo date('F j, Y', strtotime($user['created_at'])); ?>
                                 </p>
                             </div>
                         </div>
