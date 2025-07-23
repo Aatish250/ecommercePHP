@@ -20,16 +20,16 @@
     $order_id = $_GET['order_id']; // to be changed later
 
 
-    $orderDetail = "SELECT * FROM orders where order_id=$order_id and uid = $user_id";
+    $orderDetail = "SELECT * FROM orders where order_id=$order_id and user_id = $user_id";
     $orderDetailResult = mysqli_query($conn, $orderDetail);
-
+    
     if($orderDetailResult){
-
+        
         if(mysqli_num_rows($orderDetailResult) > 0){
-
+            
             $order = mysqli_fetch_assoc($orderDetailResult);
-
-            $orderItemsDetail = "SELECT * from order_details WHERE order_id = $order_id and uid = $user_id";
+            
+            $orderItemsDetail = "SELECT * from order_details WHERE order_id = $order_id and user_id = $user_id";
             $orderItemsDetailResult = mysqli_query($conn, $orderItemsDetail);
             while ($itemRow = mysqli_fetch_assoc($orderItemsDetailResult)){
                 $order_items[] = $itemRow;
@@ -40,9 +40,9 @@
             exit();
         }
 
-    }else{
-        echo "Failed reading sql";
-        exit();
+    // }else{
+    //     echo "Failed reading sql";
+    //     exit();
     }
     ?>
 
@@ -116,11 +116,11 @@
                         <div class="flex-1">
                             <h3 class="font-medium text-gray-800"><?php echo htmlspecialchars($item['product_name']); ?></h3>
                             <p class="text-gray-600">Quantity: <?php echo $item['quantity']; ?></p>
-                            <p class="text-gray-600">Price: $<?php echo number_format($item['price'], 2); ?></p>
+                            <p class="text-gray-600">Price: $<?php echo number_format($item['order_price'], 2); ?></p>
                         </div>
                         <div class="text-right">
                             <p class="font-semibold text-gray-800">
-                                $<?php echo number_format($item['price'] * $item['quantity'], 2); ?>
+                                $<?php echo number_format($item['order_price'] * $item['quantity'], 2); ?>
                             </p>
                         </div>
                     </div>
@@ -150,7 +150,7 @@
 
         <!-- Action Buttons -->
         <div class="text-center space-x-4">
-            <a href="order-tracking.php?id=<?php echo $order_id; ?>" 
+            <a href="order-tracking.php?order_id=<?php echo $order_id; ?>" 
                class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-semibold">
                 Track Your Order
             </a>
