@@ -7,122 +7,150 @@
     <title>Checkout</title>
 </head>
 <body class="bg-slate-200">
+
     <?php
+
     session_start();
     $active_page = 1;
     include '../components/user_nav.php';
     include '../components/flashMessage.php';
     require '../config/db.php';
-    
-    $user_id = "1"; // to be changed later
-    $user_username = "Aatish"; // to be changed later
-    $user_email = "machamasi321@gmail.com"; // to be changed later
-    $user_phone = "9800000000"; // to be changed later
-    $user_shipping_address = "Kathmandu, Nepal"; // to be changed later
-    if(isset($_GET['selected_cart_ids'])){
-        $selected_cart_id = $_GET['selected_cart_ids'];
-        $whereClause = " AND cart_id IN ($selected_cart_id)";
-        echo "Selected Cart ID: ".$selected_cart_id;
-    }else{
-        $whereClause = "";
-    }
-
-    $cartQuery = "SELECT * FROM cart_details WHERE user_id = $user_id $whereClause";
-    
-
-    $subtotal = 0;
-
-    $cartResult = mysqli_query($conn, $cartQuery);
-
-    if(!mysqli_num_rows($cartResult)) {
-        header ("Location: cart.php");
-        exit();
-    }
-
-    // to verify if there is any data found
-    while($row = mysqli_fetch_assoc($cartResult)){
-        $cart_items[] = $row;
-    }
-    
-    // Calculate totals
-    $subtotal = 0;
-    foreach ($cart_items as $item) {
-        $subtotal += $item['product_price'] * $item['quantity'];
-    }
-
-    $shipping_fee = $subtotal > 1000 ? 0 : 10; // Free shipping over $100
-    $total = $subtotal + $shipping_fee;
-    
-    
-    // interact with the database
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $shipping_address = $_POST['shipping_address'];
-        $phone = $_POST['phone'];
-        $payment_method = $_POST['payment_method'];
-        $notes = $_POST['notes'] ?? '';
-        
-        echo "<br>Placed Order Details:<br><pre>";
-        echo $shipping_address;
-        echo $phone;
-        echo $payment_method;
-        echo $notes;
-
-            
-            // Create order
-            $orderQuery = "INSERT INTO orders (uid, total, shipping_address, phone, payment_method, notes, status) 
-                           VALUES ('$user_id', '$total', '$shipping_address', '$phone', '$payment_method', '$notes', 'pending')";
-            
-            
-            $resultOrderQuery = mysqli_query($conn, $orderQuery);
-            
-            $order_id = mysqli_insert_id($conn);
-            
-            // Add order items
-            foreach ($cart_items as $item) {
-                $product_id = $item['product_id'];
-                $quantity = $item['quantity'];
-                $product_price = $item['product_price'];
-                
-                $orderItemQuery = "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ('$order_id', '$product_id', '$quantity', '$product_price')";
-                $resultOrderItemQuery = mysqli_query($conn, $orderItemQuery);
-                // Update product stock
-                $updateStockQuery = "UPDATE products SET stock = stock - $quantity WHERE product_id = $product_id";
-                $resultUpdateStockQuery = mysqli_query($conn, $updateStockQuery);
-            }
-            
-            // Clear cart
-            $clearCartQuery = "DELETE FROM cart WHERE user_id = $user_id $whereClause";
-            $resultClearCartQuery = mysqli_query($conn, $clearCartQuery);
-            
-            if($resultOrderQuery &&$resultOrderItemQuery && $resultUpdateStockQuery && $resultClearCartQuery){
-                $_SESSION['message-status'] = 'success';
-                $_SESSION['message-'] = "Order placed successfully";
-                if ($payment_method === 'khalti') {
-                    // Redirect to Khalti payment
-                    header("Location: khalti-payment.php?order_id=$order_id");
-                } else {
-                    // Redirect to order confirmation
-                    header("Location: order-confirmation.php?order_id=$order_id");
-                }
-                // exit();
-            }else{
-                $_SESSION['message-status'] = 'fail';
-                $_SESSION['message-'] = "Order placement failed";
-            }
-            echo "<br>Order ID: ".$order_id."</pre><br>";
-            
-    }
-    ?>
-
-    <?php
+    // flash message script
     if (isset($_SESSION['message-status']) && isset($_SESSION['message'])) {
         ?>
         <script>
             setFlashMessage("<?php echo $_SESSION['message-status'] ?>", "<?php echo $_SESSION['message'] ?>");
         </script>
         <?php
+     }
+
+
+    // session data
+    $user_id = "1"; // to be changed later
+    $user_username = "Aatish"; // to be changed later
+    $user_email = "machamasi321@gmail.com"; // to be changed later
+    $user_number = "9800000000"; // to be changed later
+    $user_shipping_address = "Bhaktapur, Suryabinayak"; // to be changed later
+
+    // if selected items are sent
+    if(isset($_GET['selected_cart_ids'])){
+        $selected_cart_id = $_GET['selected_cart_ids'];
+        $whereClause = "AND cart_id IN ($selected_cart_id)";
+        echo "Selected Cart ID: ".$selected_cart_id;
+    }else{
+        $whereClause = "";
     }
+
+    // scan from cart_detail view
+    $cartDetailQuery = "SELECT * FROM cart_details WHERE user_id = $user_id $whereClause";
+    $cartDetailResult = mysqli_query($conn, $cartDetailQuery);
+
+    
+    echo "<br> $cartDetailQuery <br>";
+    if(mysqli_num_rows($cartDetailResult) == 0){
+        echo " NO DATA FOUND ";
+        exit();
+    }
+    
+    // fetch data form cart_details and store it in _cart_details
+    while ($row = mysqli_fetch_assoc($cartDetailResult)) $cart_details[] = $row;
+    
+    
+    // tally upp the sum of cart_total to sub total
+    function getTotals($cart_details){
+        $subtotal = 0;
+        foreach($cart_details as $cart) {
+            $subtotal += $cart['cart_total'];
+        }
+        // pre defined variables to be showed in the page and sdded to database
+        $shipping_fee = $subtotal > 100 ? 0 : 10;
+        $total = $subtotal + $shipping_fee;
+
+        $object = [
+            'subtotal' => $subtotal,
+            'shipping_fee' => $shipping_fee,
+            'total' => $total
+        ];
+        return $object;
+    }
+    $totals = getTotals($cart_details);
+    
+    
+    // now when place order is clicked
+    if ($_SERVER['REQUEST_METHOD'] == "POST"){
+
+        // echo "<br>Sub Total: ".$totals['subtotal'];
+        // echo "<br>Shipping Fee: ".$totals['shipping_fee'];
+        // echo "<br>Total: ".$totals['total'];
+        // echo "<br>Where Clause : ".$whereClause;
+
+        // Insert data to orders table
+        $insertOrderSQL = "INSERT INTO `orders`(`uid`, `shipping_fee`, `total`, `status`, `shipping_address`, `phone`, `payment_method`, `payment_status`, `notes`) VALUES (
+            '$user_id',
+            '{$totals['shipping_fee']}',
+            '{$totals['total']}',
+            'pending',
+            '".mysqli_real_escape_string($conn, $_POST['shipping_address'])."',
+            '".mysqli_real_escape_string($conn, $_POST['phone'])."',
+            '".mysqli_real_escape_string($conn, $_POST['payment_method'])."',
+            'pending',
+            '".mysqli_real_escape_string($conn, $_POST['notes'])."'
+        )";
+
+        $resultOrder = mysqli_query($conn, $insertOrderSQL);
+
+        // Get the last inserted order id
+        $order_id = mysqli_insert_id($conn);
+
+        $allOrderItemsInserted = true;
+        $allStockUpdated = true;
+
+        foreach ($cart_details as $cart_item) {
+            $product_id = $cart_item['product_id'];
+            $quantity = $cart_item['quantity'];
+            $order_price = $cart_item['product_price'];
+            $sub_total = $cart_item['cart_total'];
+
+            // Insert into order_items
+            $insertOrderItemsSQL = "INSERT INTO `order_items`(`order_id`, `product_id`, `quantity`, `order_price`, `sub_total`) 
+                VALUES ( '$order_id', '$product_id', '$quantity', '$order_price', '$sub_total' )";
+            $resultOrderItem = mysqli_query($conn, $insertOrderItemsSQL);
+            
+            if (!$resultOrderItem) $allOrderItemsInserted = false;
+
+            // Update product stock
+            $updateProductStockSQL = "UPDATE `products` SET `stock` = `stock` - $quantity WHERE `product_id` = $product_id";
+            $resultUpdateStock = mysqli_query($conn, $updateProductStockSQL);
+            
+            if (!$resultUpdateStock) $allStockUpdated = false;
+        }
+
+        // Delete the cart items which are selected
+        $deleteCartSelected = "DELETE FROM `cart` WHERE `user_id` = $user_id $whereClause";
+        $resultDeleteCart = mysqli_query($conn, $deleteCartSelected);
+
+        // Only execute if all SQLs are successful
+        if ($resultOrder && $allOrderItemsInserted && $allStockUpdated && $resultDeleteCart) {
+            $_SESSION['message-status'] = 'success';
+            $_SESSION['message'] = "Order placed successfully!";
+            if ($_POST['payment_method'] === 'khalti') {
+                // Redirect to Khalti payment
+                echo "Redirect to Khalti payment";
+                header("Location: khalti-payment.php?order_id=$order_id");
+            } else {
+                // Redirect to order confirmation
+                echo "Redirect to order confirmation";
+                header("Location: order-confirmation.php?order_id=$order_id");
+            }
+            exit();
+        } else {
+            $_SESSION['message-status'] = 'error';
+            $_SESSION['message'] = "There was an error placing your order. Please try again.";
+        }
+    }
+    
     ?>
+
 
     <div class="max-w-6xl mx-auto px-4 py-8">
         <div class="mb-2 -mt-4">
@@ -159,7 +187,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number *</label>
                         <input type="tel" name="phone" required
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                               value="<?php echo htmlspecialchars($user_phone); ?>"
+                               value="<?php echo htmlspecialchars($user_number); ?>"
                                placeholder="Enter your phone number">
                     </div>
 
@@ -236,18 +264,18 @@
                 
                 <!-- Order Items -->
                 <div class="space-y-4 mb-6">
-                    <?php foreach ($cart_items as $item): ?>
+                    <?php foreach ($cart_details as $cart): ?>
                         <div class="flex items-center space-x-4">
-                            <img src="<?php echo '../img/product/'.$item['image']; ?>" 
-                                 alt="<?php echo htmlspecialchars($item['product_name']); ?>" 
+                            <img src="<?php echo '../img/product/'.$cart['image']; ?>" 
+                                 alt="<?php echo htmlspecialchars($cart['product_name']); ?>" 
                                  class="w-16 h-16 object-cover rounded">
                             <div class="flex-1">
-                                <h3 class="font-medium text-gray-800"><?php echo htmlspecialchars($item['product_name']); ?></h3>
-                                <p class="text-gray-600">Qty: <?php echo $item['quantity']; ?></p>
+                                <h3 class="font-medium text-gray-800"><?php echo htmlspecialchars($cart['product_name']); ?></h3>
+                                <p class="text-gray-600">Qty: <?php echo $cart['quantity']; ?></p>
                             </div>
                             <div class="text-right">
                                 <p class="font-semibold text-gray-800">
-                                    $<?php echo number_format($item['product_price'] * $item['quantity'], 2); ?>
+                                    $<?php echo number_format($cart['product_price'] * $cart['quantity'], 2); ?>
                                 </p>
                             </div>
                         </div>
@@ -257,23 +285,23 @@
                 <!-- Order Totals -->
                 <div class="border-t pt-4 space-y-2">
                     <div class="flex justify-between">
-                        <span class="text-gray-600">Subtotal</span>
-                        <span class="text-gray-800">$<?php echo number_format($subtotal, 2); ?></span>
+                        <span class="text-gray-600">subtotal</span>
+                        <span class="text-gray-800">$<?php echo number_format($totals['subtotal'], 2); ?></span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-600">Shipping</span>
                         <span class="text-gray-800">
-                            <?php echo $shipping_fee > 0 ? '$' . number_format($shipping_fee, 2) : 'Free'; ?>
+                            <?php echo $totals['shipping_fee'] > 0 ? '$' . number_format($totals['shipping_fee'], 2) : 'Free'; ?>
                         </span>
                     </div>
-                    <?php if ($shipping_fee == 0 && $subtotal > 100): ?>
+                    <?php if ($totals['shipping_fee'] == 0 && $totals['subtotal'] > 100): ?>
                         <div class="text-sm text-green-600">
                             🎉 You qualify for free shipping!
                         </div>
                     <?php endif; ?>
                     <div class="flex justify-between text-lg font-semibold border-t pt-2">
                         <span>Total</span>
-                        <span class="text-indigo-600">$<?php echo number_format($total, 2); ?></span>
+                        <span class="text-indigo-600">$<?php echo number_format($totals['total'], 2); ?></span>
                     </div>
                 </div>
             </div>

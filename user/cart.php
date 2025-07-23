@@ -55,11 +55,6 @@
     <script>
         $(document).ready(() => {
             printData(true);
-
-            $("#table-body").on('click', 'button[name="procced_checkout"]', function () {
-                alert("Clicked procced-checkout")
-            });
-
         });
 
         function printData(status) {
