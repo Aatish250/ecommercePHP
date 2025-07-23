@@ -1,0 +1,17 @@
+select * from orders;
+select * from order_items;
+
+Select uid, o.order_id, order_item_id, product_id, price, quantity, total, status, shipping_address, phone, payment_method, payment_status, khalti_token, admin_notes, created_at, updated_at
+from orders o
+inner join order_items oi on o.order_id = oi.order_id
+
+Select uid, o.order_id, order_item_id, oi.product_id, product_name, image, price, oi.quantity, o.total, status, shipping_address, phone, payment_method, payment_status, khalti_token, admin_notes, created_at, updated_at
+from orders o
+inner join order_items oi on o.order_id = oi.order_id
+inner join cart_details c on oi.product_id = c.product_id;
+
+Select uid, o.order_id, order_item_id, oi.product_id, product_name, image, price, oi.quantity, o.total, status, shipping_address, phone, payment_method, payment_status, khalti_token, admin_notes, created_at, updated_at
+from orders o
+inner join order_items oi on o.order_id = oi.order_id
+inner join products p on p.product_id = oi.product_id
+inner join image i on i.img_id = p.img_id;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 23, 2025 at 08:21 AM
+-- Generation Time: Jul 23, 2025 at 08:34 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -177,15 +177,15 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `product_name`, `product_price`, `stock`, `category`, `description`, `img_id`) VALUES
-(1, 'product name1', 1200.00, 992, 'Game', 'product', 1),
-(4, 'product name4', 153.00, 974, 'earphone', 'fadshjke', 4),
-(5, 'product name', 0.03, 930, 'laptop', 'cxz', 5),
-(6, 'product name', 1.62, 979, 'speaker', 'zX', 6),
-(7, 'Apple', 100.00, 996, 'fruit', 'Apple', 7),
-(9, 'Carrot', 10.00, 997, 'Vegitable', 'Orange', 9),
-(10, 'Banana', 30.00, 998, 'Fruit', 'Banana', 10),
-(11, 'OAAAE!', 1.00, 962, 'Game', 'Ke hereko handium! ?', 11),
-(12, 'Test2', 13.00, 989, 'Category2', 'Testing categories', 12);
+(1, 'product name1', 1200.00, 3, 'Game', 'product', 1),
+(4, 'product name4', 153.00, 2, 'earphone', 'fadshjke', 4),
+(5, 'product name', 0.03, 8, 'laptop', 'cxz', 5),
+(6, 'product name', 1.62, 2, 'speaker', 'zX', 6),
+(7, 'Apple', 100.00, 2, 'fruit', 'Apple', 7),
+(9, 'Carrot', 10.00, 2, 'Vegitable', 'Orange', 9),
+(10, 'Banana', 30.00, 20, 'Fruit', 'Banana', 10),
+(11, 'OAAAE!', 1.00, 99, 'Game', 'Ke hereko handium! ?', 11),
+(12, 'Test2', 13.00, 1, 'Category2', 'Testing categories', 12);
 
 -- --------------------------------------------------------
 
@@ -209,7 +209,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `phone`, `role`, `status`, `created_at`) VALUES
-(1, 'Aatish', 'atish@example.com', 'password', '9841693432', 'user', 'active', '2025-06-27 04:42:45');
+(1, 'Aatish', 'a@example.com', 'password', '9841693432', 'user', 'active', '2025-06-27 04:42:45');
 
 -- --------------------------------------------------------
 

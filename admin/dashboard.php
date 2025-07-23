@@ -1,3 +1,46 @@
+<?php
+require '../config/db.php';
+
+// Initialize variables with safe defaults
+$total_products = 0;
+$total_users = 0;
+$low_stock_products = array();
+$orders = array();
+
+if (!$conn) {
+    die('Database connection failed');
+}
+
+// Total Products
+$res = mysqli_query($conn, "SELECT COUNT(*) as cnt FROM products");
+if ($res && ($row = mysqli_fetch_assoc($res))) {
+    $total_products = $row['cnt'];
+}
+
+// Total Users
+$res = mysqli_query($conn, "SELECT COUNT(*) as cnt FROM users");
+if ($res && ($row = mysqli_fetch_assoc($res))) {
+    $total_users = $row['cnt'];
+}
+
+// Low Stock Products (stock <= 2 is No Stock, 3-5 is Low Stock)
+$res = mysqli_query($conn, "SELECT * FROM products WHERE stock <= 5 ORDER BY stock ASC");
+if ($res) {
+    while ($row = mysqli_fetch_assoc($res)) {
+        $low_stock_products[] = $row;
+    }
+}
+
+// recent orders
+$res = mysqli_query($conn, "SELECT * FROM orders ORDER BY created_at ASC");
+if ($res) {
+    while ($row = mysqli_fetch_assoc($res)) {
+        $orders[] = $row;
+    }
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -71,7 +114,7 @@
                     </span>
                     <div class="flex mb-1 md:flex-col w-full">
                         <span class="flex-1 ml-5 text-[18px] text-slate-700">Total Products</span>
-                        <span class="mr-5 ml-5 font-bold text-2xl text-slate-500">100</span>
+                        <span class="mr-5 ml-5 font-bold text-2xl text-slate-500"><?php echo $total_products; ?></span>
                     </div>
                 </div>
                 <!-- total users -->
@@ -86,7 +129,7 @@
                     </span>
                     <div class="flex mb-1 md:flex-col w-full">
                         <span class="flex-1 ml-5 text-[18px] text-slate-700">Total Users</span>
-                        <span class="mr-5 ml-5 font-bold text-2xl text-slate-500">1</span>
+                        <span class="mr-5 ml-5 font-bold text-2xl text-slate-500"><?php echo $total_users; ?></span>
                     </div>
                 </div>
             </div>
@@ -103,30 +146,22 @@
                         <th class="border-r-2 border-b-2 border-slate-100">Item</th>
                         <th class="border-b-2 border-slate-100">Status</th>
                     </tr>
-                    <tr class="text-center bg-red-100">
-                        <td class="border-l-5 border-red-300">12</td>
+                    <?php foreach ($low_stock_products as $prod): ?>
+                    <tr class="text-center <?php echo ($prod['stock'] <= 2) ? 'bg-red-100' : ''; ?>">
+                        <td class="border-l-5 <?php echo ($prod['stock'] <= 2) ? 'border-red-300' : 'border-amber-300'; ?>"><?php echo $prod['product_id']; ?></td>
                         <td class="text-left w-3/4 flex flex-col p-1 pl-6">
-                            <span class="text-xl">Coffee Maker</span>
-                            <span class="text-sm text-slate-500">Stock: 2</span>
+                            <span class="text-xl"><?php echo htmlspecialchars($prod['product_name']); ?></span>
+                            <span class="text-sm text-slate-500">Stock: <?php echo $prod['stock']; ?></span>
                         </td>
                         <td>
-                            <div class="w-fit bg-red-200 text-red-600 m-auto px-3 py-2 my-1 rounded-full text-sm">
-                                No
-                                Stock</div>
+                            <?php if ($prod['stock'] <= 2): ?>
+                                <div class="w-fit bg-red-200 text-red-600 m-auto px-3 py-2 my-1 rounded-full text-sm">No Stock</div>
+                            <?php else: ?>
+                                <div class="w-fit bg-amber-100 text-amber-600 m-auto px-3 py-2 my-1 rounded-full text-sm">Low Stock</div>
+                            <?php endif; ?>
                         </td>
                     </tr>
-                    <tr class="text-center">
-                        <td class="border-l-5 border-amber-300">5</td>
-                        <td class="text-left w-3/4 flex flex-col p-1 pl-6">
-                            <span class="text-xl">Laptop</span>
-                            <span class="text-sm text-slate-500">Stock: 1</span>
-                        </td>
-                        <td>
-                            <div class="w-fit bg-amber-100 text-amber-600 m-auto px-3 py-2 my-1 rounded-full text-sm">
-                                Low Stock
-                            </div>
-                        </td>
-                    </tr>
+                    <?php endforeach; ?>
                 </table>
             </div>
         </div>
@@ -135,85 +170,46 @@
         <div class="w-full lg:w-1/2 bg-white mt-6 rounded-lg p-4 min-h-24">
             <div class="text-2xl font-medium text-slate-700">Recent Orders</div>
             <div class="mt-4 space-y-4">
-                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
-                    <div class="text-center">
-                        <div class="text-gray-600">John Doe</div>
-                        <div class="text-sm text-gray-500">Jun 21, 2025</div>
-                    </div>
-                    <div class="flex-1 ml-5">
-                        <div class="text-lg font-medium text-gray-900">Order #2</div>
-                        <div class="text-sm text-gray-500">Quantity: 2</div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="text-lg font-semibold text-gray-900">$200.00</div>
-                        <div class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">Processing
-                        </div>
-                    </div>
-                </div>
 
-                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
-                    <div class="text-center">
-                        <div class="text-gray-600">John Doe</div>
-                        <div class="text-sm text-gray-500">Jun 21, 2025</div>
-                    </div>
-                    <div class="flex-1 ml-5">
-                        <div class="text-lg font-medium text-gray-900">Order #2</div>
-                        <div class="text-sm text-gray-500">Quantity: 2</div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="text-lg font-semibold text-gray-900">$200.00</div>
-                        <div class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">Delivered
-                        </div>
-                    </div>
-                </div>
+                <?php
+                foreach ($orders as $order):
+                    // Fetch username
+                    $userResult = mysqli_query($conn, "SELECT username FROM users WHERE user_id = {$order['user_id']}");
+                    $username = ($userResult && $row = mysqli_fetch_assoc($userResult)) ? $row['username'] : 'Unknown';
 
-                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
-                    <div class="text-center">
-                        <div class="text-gray-600">John Doe</div>
-                        <div class="text-sm text-gray-500">Jun 21, 2025</div>
-                    </div>
-                    <div class="flex-1 ml-5">
-                        <div class="text-lg font-medium text-gray-900">Order #2</div>
-                        <div class="text-sm text-gray-500">Quantity: 2</div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="text-lg font-semibold text-gray-900">$50.00</div>
-                        <div class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm font-medium">Cancelled
-                        </div>
-                    </div>
-                </div>
+                    // Fetch total quantity from order_details view
+                    $qtyResult = mysqli_query($conn, "SELECT SUM(quantity) AS total_quantity FROM order_details WHERE order_id = {$order['order_id']}");
+                    $quantity = ($qtyResult && $qtyRow = mysqli_fetch_assoc($qtyResult)) ? ($qtyRow['total_quantity'] ?? 0) : 0;
 
-                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
-                    <div class="text-center">
-                        <div class="text-gray-600">John Doe</div>
-                        <div class="text-sm text-gray-500">Jun 21, 2025</div>
-                    </div>
-                    <div class="flex-1 ml-5">
-                        <div class="text-lg font-medium text-gray-900">Order #2</div>
-                        <div class="text-sm text-gray-500">Quantity: 2</div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="text-lg font-semibold text-gray-900">$50.00</div>
-                        <div class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">Shipped
+                    // Status badge color
+                    $status = strtolower($order['status'] ?? 'Processing');
+                    $status_map = [
+                        'delivered' => 'bg-green-100 text-green-700',
+                        'cancelled' => 'bg-slate-100 text-slate-700',
+                        'pending' => 'bg-amber-100 text-amber-700',
+                        'processing' => 'bg-blue-100 text-blue-700'
+                    ];
+                    $status_class = $status_map[$status] ?? 'bg-blue-100 text-blue-700';
+                ?>
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
+                        <div class="text-center">
+                            <div class="text-gray-600"><?php echo htmlspecialchars($username); ?></div>
+                            <div class="text-sm text-gray-500"><?php echo date('M j, Y', strtotime($order['created_at'])); ?></div>
+                        </div>
+                        <div class="flex-1 ml-5">
+                            <div class="text-lg font-medium text-gray-900">Order #<?php echo $order['order_id']; ?></div>
+                            <div class="text-sm text-gray-500">Quantity: <?php echo $quantity; ?></div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="text-lg font-semibold text-gray-900">
+                                $<?php echo number_format($order['total'] ?? 0, 2); ?>
+                            </div>
+                            <div class="<?php echo $status_class; ?> px-3 py-1 rounded-full text-sm font-medium">
+                                <?php echo ucfirst($status); ?>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm">
-                    <div class="text-center">
-                        <div class="text-gray-600">John Doe</div>
-                        <div class="text-sm text-gray-500">Jun 21, 2025</div>
-                    </div>
-                    <div class="flex-1 ml-5">
-                        <div class="text-lg font-medium text-gray-900">Order #2</div>
-                        <div class="text-sm text-gray-500">Quantity: 2</div>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <div class="text-lg font-semibold text-gray-900">$50.00</div>
-                        <div class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-medium">Pending
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
 
             </div>
         </div>
