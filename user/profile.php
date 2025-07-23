@@ -6,6 +6,24 @@
 
     $userResult = mysqli_query($conn, "Select * from users where user_id = $user_id");
     $user = mysqli_fetch_assoc($userResult);
+
+    $orderDetail = "SELECT * FROM orders where user_id = $user_id";
+    $orderDetailResult = mysqli_query($conn, $orderDetail);
+    
+    if($orderDetailResult){
+        
+        if(mysqli_num_rows($orderDetailResult) > 0){
+            $order_count = 0;
+            while($row = mysqli_fetch_assoc($orderDetailResult)){
+                $orders[] = $row;
+            }
+        } 
+        else {
+            echo "No correct redirection";
+            exit();
+        }
+
+    }
 ?>
 
 <!DOCTYPE html>
@@ -23,6 +41,12 @@
     <?php
     $active_page = 2;
     include '../components/user_nav.php';
+    include '../components/flashMessage.php';
+    if (isset($_SESSION['message-status']) && isset($_SESSION['message'])) {
+        echo "<script>setFlashMessage('" . $_SESSION['message-status'] . "', '" . $_SESSION['message'] . "');</script>";
+        unset($_SESSION['message-status']);
+        unset($_SESSION['message']);
+    }
     ?>
 
     <section>
@@ -43,6 +67,12 @@
                                 <label class="block text-sm font-medium text-gray-600">Email</label>
                                 <p class="text-gray-800"><?php echo $user['email']; ?></p>
                             </div>
+                            <?php if (!empty($user['phone'])): ?>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600">Phone</label>
+                                <p class="text-gray-800"><?php echo $user['phone']; ?></p>
+                            </div>
+                            <?php endif; ?>
                             <div>
                                 <label class="block text-sm font-medium text-gray-600">Member Since</label>
                                 <p class="text-gray-800">
@@ -63,72 +93,57 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-lg shadow-md p-6">
                         <h2 class="text-xl font-semibold text-gray-800 mb-4">Order History</h2>
-
-
+                        <?php if (empty($orders)): ?>
                         <p class="text-gray-500">No orders found.</p>
-
-                        <div class="overflow-x-auto">
-                            <table class="w-full">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                                            Order ID</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date
-                                        </th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                                            Total</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                                            Status</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                                            Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200">
-
-                                    <tr>
-                                        <td class="px-4 py-3 text-sm text-gray-900">#2</td>
-                                        <td class="px-4 py-3 text-sm text-gray-900">
-                                            June 19, 2025
-                                        </td>
-                                        <td class="px-4 py-3 text-sm text-gray-900">
-                                            $200.00
-                                        </td>
-                                        <?php $order['status'] = 'processing' ?>
-                                        <td class="px-4 py-3 text-sm">
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                                    <?php
-                                                    switch ($order['status']) {
-                                                        case 'pending':
-                                                            echo 'bg-yellow-100 text-yellow-800';
-                                                            break;
-                                                        case 'processing':
-                                                            echo 'bg-blue-100 text-blue-800';
-                                                            break;
-                                                        case 'shipped':
-                                                            echo 'bg-purple-100 text-purple-800';
-                                                            break;
-                                                        case 'delivered':
-                                                            echo 'bg-green-100 text-green-800';
-                                                            break;
-                                                        case 'cancelled':
-                                                            echo 'bg-red-100 text-red-800';
-                                                            break;
-                                                        default:
-                                                            echo 'bg-gray-100 text-gray-800';
-                                                    }
-                                                    ?>">
-                                                Processing
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-3 text-sm">
-                                            <a href="order_traking.php" class="text-indigo-600 hover:text-indigo-900">
-                                                Track Order
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <?php else: ?>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        <?php foreach ($orders as $order): ?>
+                                            <tr>
+                                                <td class="px-4 py-3 text-sm text-gray-900">#<?php echo $order['order_id']; ?></td>
+                                                <td class="px-4 py-3 text-sm text-gray-900">
+                                                    <?php echo date('M j, Y', strtotime($order['created_at'])); ?>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm text-gray-900">
+                                                    $<?php echo number_format($order['total'], 2); ?>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm">
+                                                    <span class="px-2 py-1 text-xs font-semibold rounded-full 
+                                                        <?php 
+                                                        switch($order['status']) {
+                                                            case 'pending': echo 'bg-yellow-100 text-yellow-800'; break;
+                                                            case 'processing': echo 'bg-blue-100 text-blue-800'; break;
+                                                            case 'shipped': echo 'bg-purple-100 text-purple-800'; break;
+                                                            case 'delivered': echo 'bg-green-100 text-green-800'; break;
+                                                            case 'cancelled': echo 'bg-red-100 text-red-800'; break;
+                                                            default: echo 'bg-gray-100 text-gray-800';
+                                                        }
+                                                        ?>">
+                                                        <?php echo ucfirst($order['status']); ?>
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm">
+                                                    <a href="order-tracking.php?order_id=<?php echo $order['order_id']; ?>" 
+                                                    class="text-indigo-600 hover:text-indigo-900">
+                                                        Track Order
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
