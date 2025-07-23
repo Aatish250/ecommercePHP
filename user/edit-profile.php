@@ -15,8 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_username = mysqli_real_escape_string($conn, $_POST['username']);
     $new_email = mysqli_real_escape_string($conn, $_POST['email']);
     $new_phone = mysqli_real_escape_string($conn, $_POST['phone']);
+    $new_shipping_address = mysqli_real_escape_string($conn, $_POST['shipping_address']);
+    $new_gender = mysqli_real_escape_string($conn, $_POST['gender']);
+    $new_dob = mysqli_real_escape_string($conn, $_POST['dob']);
     $new_password = $_POST['password'];
-    $update_fields = "username = '$new_username', email = '$new_email', phone = '$new_phone'";
+    $update_fields = "username = '$new_username', email = '$new_email', phone = '$new_phone', shipping_address = '$new_shipping_address', gender = '$new_gender', dob = " . (empty($new_dob) ? 'NULL' : "'$new_dob'");
     if (!empty($new_password)) {
         // TODO: Use password_hash for security. Storing plain text for now (not recommended)
         // $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
@@ -63,6 +66,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-600 mb-1">Phone</label>
                         <input type="text" name="phone" value="<?php echo isset($user['phone']) ? htmlspecialchars($user['phone']) : ''; ?>" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Shipping Address</label>
+                        <input type="text" name="shipping_address" value="<?php echo isset($user['shipping_address']) ? htmlspecialchars($user['shipping_address']) : ''; ?>" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Gender</label>
+                        <select name="gender" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="male" <?php echo ($user['gender'] === 'male') ? 'selected' : ''; ?>>Male</option>
+                            <option value="female" <?php echo ($user['gender'] === 'female') ? 'selected' : ''; ?>>Female</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Date of Birth</label>
+                        <input type="date" name="dob" value="<?php echo isset($user['dob']) && $user['dob'] ? date('Y-m-d', strtotime($user['dob'])) : ''; ?>" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-600 mb-1">Password <span class="text-xs text-gray-400">(Leave blank to keep current)</span></label>
