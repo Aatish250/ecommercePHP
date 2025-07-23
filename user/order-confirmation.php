@@ -40,9 +40,9 @@
             exit();
         }
 
-    // }else{
-    //     echo "Failed reading sql";
-    //     exit();
+    }else{
+        echo "Failed reading sql";
+        exit();
     }
     ?>
 
