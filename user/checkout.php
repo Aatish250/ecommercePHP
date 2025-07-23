@@ -27,10 +27,13 @@
 
     // session data
     $user_id = "1"; // to be changed later
-    $user_username = "Aatish"; // to be changed later
-    $user_email = "machamasi321@gmail.com"; // to be changed later
-    $user_number = "9800000000"; // to be changed later
-    $user_shipping_address = "Bhaktapur, Suryabinayak"; // to be changed later
+
+    if($res = mysqli_query($conn,"SELECT * FROM users WHERE user_id = $user_id"))
+     $user = mysqli_fetch_assoc($res);
+    $user_username = $user['username'] ?: ""; // to be changed later
+    $user_email = $user['email'] ?: ""; // to be changed later
+    $user_number = $user['phone'] ?: ""; // to be changed later
+    $user_shipping_address = $user['shipping_address'] ?: ""; // to be changed later
 
     // if selected items are sent
     if(isset($_GET['selected_cart_ids'])){
