@@ -36,7 +36,7 @@
     if(isset($_GET['selected_cart_ids'])){
         $selected_cart_id = $_GET['selected_cart_ids'];
         $whereClause = "AND cart_id IN ($selected_cart_id)";
-        echo "Selected Cart ID: ".$selected_cart_id;
+        // echo "Selected Cart ID: ".$selected_cart_id;
     }else{
         $whereClause = "";
     }
@@ -45,8 +45,6 @@
     $cartDetailQuery = "SELECT * FROM cart_details WHERE user_id = $user_id $whereClause";
     $cartDetailResult = mysqli_query($conn, $cartDetailQuery);
 
-    
-    echo "<br> $cartDetailQuery <br>";
     if(mysqli_num_rows($cartDetailResult) == 0){
         echo " NO DATA FOUND ";
         exit();
@@ -85,7 +83,7 @@
         // echo "<br>Where Clause : ".$whereClause;
 
         // Insert data to orders table
-        $insertOrderSQL = "INSERT INTO `orders`(`uid`, `shipping_fee`, `total`, `status`, `shipping_address`, `phone`, `payment_method`, `payment_status`, `notes`) VALUES (
+        $insertOrderSQL = "INSERT INTO `orders`(`user_id`, `shipping_fee`, `total`, `status`, `shipping_address`, `phone`, `payment_method`, `payment_status`, `notes`) VALUES (
             '$user_id',
             '{$totals['shipping_fee']}',
             '{$totals['total']}',
