@@ -25,7 +25,7 @@ if ($res && ($row = mysqli_fetch_assoc($res))) {
 }
 
 // Total Users
-$res = mysqli_query($conn, "SELECT COUNT(*) as cnt FROM users");
+$res = mysqli_query($conn, "SELECT COUNT(*) as cnt FROM users where role = 'user'");
 if ($res && ($row = mysqli_fetch_assoc($res))) {
     $total_users = $row['cnt'];
 }

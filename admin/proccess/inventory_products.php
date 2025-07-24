@@ -122,7 +122,7 @@ if (mysqli_num_rows($result) > 0) {
         <?php
     }
 } else {
-    echo 'No Data found';
+    echo "<td colspan='100%' class='text-center text-gray-500'>- -- --- No Data found --- -- -</td>";
 }
 ?>
 

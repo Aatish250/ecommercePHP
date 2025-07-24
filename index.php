@@ -1,7 +1,7 @@
 <?php
     session_start();
     require_once "config/db.php";
-
+    
     $login_error = "";
     $signup_error = "";
     $signup_success = "";
@@ -15,6 +15,12 @@
         session_destroy();
         header ("Location: ".$_SERVER['PHP_SELF']);
     }
+
+    // to set logged in timestmp
+    function set_current_tiemstamp_for_last_loggedin($conn){
+        $conn->query("UPDATE `users` SET `last_logged_in` = NOW() WHERE `user_id` = '{$_SESSION['user_id']}'");
+    }
+
     // Handle login form submission
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['form_type']) && $_POST['form_type'] === 'login') {
         $email = isset($_POST['email']) ? trim($_POST['email']) : '';
@@ -33,6 +39,7 @@
                     $_SESSION['user_id'] = $user['user_id'];
                     $_SESSION['role'] = $user['role'];
                     $_SESSION['username'] = $user['username'];
+                    set_current_tiemstamp_for_last_loggedin($conn);
                     if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
                         header("Location: admin/dashboard.php");
                     } elseif (isset($_SESSION['role']) && $_SESSION['role'] === 'user') {

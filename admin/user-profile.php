@@ -51,9 +51,12 @@ $badgeText = ucfirst($status);
                 <div class="ml-6">
                     <h2 class="profile-xl-text font-bold text-gray-900 flex items-center">
                         <?php echo htmlspecialchars($user['username']); ?>
-                        <span class="ml-4 px-4 py-1 text-base font-semibold rounded-full <?php echo $badgeClass; ?>">
-                            <?php echo $badgeText; ?>
-                        </span>
+                        <div class="flex flex-col">
+                            <span class="ml-4 px-4 py-1 text-base font-semibold rounded-full <?php echo $badgeClass; ?>">
+                                <?php echo $badgeText; ?>
+                            </span>
+                            
+                        </div>
                     </h2>
                     <div class="flex items-center mt-2 text-gray-500 profile-md-text">
                         <!-- Email icon -->
@@ -69,6 +72,7 @@ $badgeText = ucfirst($status);
                         <?php echo htmlspecialchars($user['phone']); ?>
                     </div>
                 </div>
+                
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div class="bg-slate-100 rounded-xl p-4 flex items-center">
@@ -148,6 +152,10 @@ $badgeText = ucfirst($status);
                     </div>
                 </div>
             </div>
+            <span class="flex ml-4">
+                                <div class="font-thin text-gray-500 text-sm">Last Logged In : </div>
+                                <div class="font-thin text-gray-500 text-sm"><?php echo date('M j, Y, g:i:s A', strtotime($user['last_logged_in'])); ?></div>
+                            </span>
         </div>
     </section>
 </body>

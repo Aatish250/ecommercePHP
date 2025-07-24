@@ -11,8 +11,9 @@
     if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['update_status'])){
         $new_status = $_POST['new_status'];
         $admin_notes = $_POST['admin_notes'] ?? '';
-
-        if($res = mysqli_query($conn, "UPDATE orders SET status = '$new_status', admin_notes = '$admin_notes' WHERE order_id = '$order_id'")){
+        $payment_status = ($new_status == "delivered" && $order['payment_method'] == "cod") ? "paid" : "pending";
+        
+        if($res = mysqli_query($conn, "UPDATE orders SET status = '$new_status', payment_status = '$payment_status', admin_notes = '$admin_notes' WHERE order_id = '$order_id'")){
             $_SESSION['message_status'] = "success";
             $_SESSION['message'] = "Order Updated";
             header ("Location: ".$_SERVER['PHP_SELF']."?order_id=$order_id");
@@ -306,7 +307,7 @@
                     </form>
                 </div>
 
-                <!-- Quick Actions ??? --> 
+                <!-- Quick Actions --> 
                 <div class="bg-white rounded-lg shadow-md p-6 no-print">
                     <h3 class="font-semibold text-gray-800 mb-4">Quick Actions</h3>
                     <div class="space-y-3">
@@ -325,8 +326,7 @@
                            ];
 
                            if(in_array($current_status, $avaliable_status)):
-                               echo $nextStatus[$current_status][0];
-                                
+                           
                         ?>
                         
                         <?php //if ($order['status'] === 'pending'): ?>
@@ -393,7 +393,7 @@
                                 <div class="w-3 h-3 bg-green-600 rounded-full mr-3"></div>
                                 <div>
                                     <p class="text-sm font-medium">Payment Confirmed</p>
-                                    <p class="text-xs text-gray-600">Via <?php echo ucfirst($order['payment_method']); ?></p>
+                                    <p class="text-xs text-gray-600">Via <?php echo ucfirst(($order['payment_method'] == "khalti") ?: "Cash On Delevery"); ?></p>
                                 </div>
                             </div>
                         <?php endif; ?>
