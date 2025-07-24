@@ -1,9 +1,11 @@
 <?php
 session_start();
+require '../config/verify_session.php';
+verify_user("user", "../");
 require '../config/db.php';
 
 // For now, use static user_id as in profile.php
-$user_id = "1";
+$user_id = $_SESSION['user_id'];
 
 // Fetch current user data
 $userResult = mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id");
@@ -21,9 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_password = $_POST['password'];
     $update_fields = "username = '$new_username', email = '$new_email', phone = '$new_phone', shipping_address = '$new_shipping_address', gender = '$new_gender', dob = " . (empty($new_dob) ? 'NULL' : "'$new_dob'");
     if (!empty($new_password)) {
-        // TODO: Use password_hash for security. Storing plain text for now (not recommended)
-        // $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-        $update_fields .= ", password = '$new_password'";
+        // Hash the password before storing it
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+        $update_fields .= ", password = '$hashed_password'";
     }
     $updateQuery = "UPDATE users SET $update_fields WHERE user_id = $user_id";
     if (mysqli_query($conn, $updateQuery)) {
@@ -83,9 +85,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="date" name="dob" value="<?php echo isset($user['dob']) && $user['dob'] ? date('Y-m-d', strtotime($user['dob'])) : ''; ?>" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Password <span class="text-xs text-gray-400">(Leave blank to keep current)</span></label>
-                        <input type="password" name="password" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500" autocomplete="new-password">
+                        <label class="block text-sm font-medium text-gray-600 mb-1">
+                            Password <span class="text-xs text-gray-400">(Leave blank to keep current, min 8 characters)</span>
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="password" 
+                                name="password" 
+                                id="password"
+                                class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10" 
+                                autocomplete="new-password"
+                                minlength="8"
+                            >
+                            <button type="button" id="toggle-password" tabindex="-1" class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 focus:outline-none" aria-label="Show password">
+                                <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path id="eye-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 5-7 9-9 9s-9-4-9-9 7-9 9-9 9 4 9 9z" />
+                                    <path id="eye-closed" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M9.88 9.88A3 3 0 0012 15a3 3 0 002.12-5.12M6.1 6.1C4.29 7.64 3 9.71 3 12c0 5 7 9 9 9 1.61 0 3.13-.31 4.5-.86M17.9 17.9A8.96 8.96 0 0021 12c0-2.29-1.29-4.36-3.1-5.9" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p id="password-error" class="text-xs text-red-500 mt-1 hidden">Password must be at least 8 characters.</p>
                     </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const form = document.querySelector('form[method="POST"]');
+                            const passwordInput = document.getElementById('password');
+                            const passwordError = document.getElementById('password-error');
+                            const togglePassword = document.getElementById('toggle-password');
+                            const eyeIcon = document.getElementById('eye-icon');
+                            const eyeOpen = document.getElementById('eye-open');
+                            const eyeClosed = document.getElementById('eye-closed');
+
+                            // Password show/hide toggle
+                            togglePassword.addEventListener('click', function() {
+                                if (passwordInput.type === 'password') {
+                                    passwordInput.type = 'text';
+                                    eyeOpen.classList.add('hidden');
+                                    eyeClosed.classList.remove('hidden');
+                                } else {
+                                    passwordInput.type = 'password';
+                                    eyeOpen.classList.remove('hidden');
+                                    eyeClosed.classList.add('hidden');
+                                }
+                            });
+
+                            form.addEventListener('submit', function(e) {
+                                if (passwordInput.value.length > 0 && passwordInput.value.length < 8) {
+                                    passwordError.classList.remove('hidden');
+                                    passwordInput.classList.add('border-red-500');
+                                    e.preventDefault();
+                                } else {
+                                    passwordError.classList.add('hidden');
+                                    passwordInput.classList.remove('border-red-500');
+                                }
+                            });
+
+                            passwordInput.addEventListener('input', function() {
+                                if (passwordInput.value.length >= 8 || passwordInput.value.length === 0) {
+                                    passwordError.classList.add('hidden');
+                                    passwordInput.classList.remove('border-red-500');
+                                }
+                            });
+                        });
+                    </script>
                     <div class="flex space-x-2">
                         <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">Save Changes</button>
                         <a href="profile.php" class="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">Cancel</a>

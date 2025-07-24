@@ -6,10 +6,11 @@
         <a id="nav-link" href="sales.php" class="text-gray-400 hover:text-slate-900">Sales</a>
         <a id="nav-link" href="orders.php" class="text-gray-400 hover:text-slate-900">Orders</a>
         <a id="nav-link" href="users.php" class="text-gray-400 hover:text-slate-900">Users</a>
-        <a id="nav-link" href="../index.php" class="text-gray-400 hover:text-slate-900">Logout</a>
+        <form action="../">
+            <button id="nav-link" name="logout" value="true" class="text-gray-400 hover:text-slate-900">Logout</button>
+        </form>
     </div>
 </nav>
-
 <script>
     function placeActive(idx) {
         let navLink = document.querySelectorAll('#nav-link');

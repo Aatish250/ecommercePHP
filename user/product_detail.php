@@ -9,7 +9,7 @@ session_start();
 if (isset($_POST['add_to_cart'])) {
     $quantity = $_POST['quantity'];
     $product_id = $_POST['product_id'];
-    $user_id = $_POST['user_id'];
+    $user_id = $_SESSION['user_id'];
 
     $existItem = mysqli_query($conn, "SELECT * FROM cart WHERE user_id = $user_id AND product_id = $product_id");
     if (mysqli_num_rows($existItem)) {
@@ -57,11 +57,7 @@ if (isset($_POST['add_to_cart'])) {
 
     $result = mysqli_query($conn, "SELECT * FROM products WHERE product_id = $product_id");
     $item = mysqli_fetch_assoc($result);
-    $img_id = $item['img_id'];
-
-    $img_result = mysqli_query($conn, "SELECT * FROM image where img_id = $img_id");
-    $img_db = mysqli_fetch_assoc($img_result);
-    $img_path = "../img/product/" . $img_db['image'];
+    $img_path = "../img/product/" . $item['image'];
     ?>
 
 
@@ -119,7 +115,7 @@ if (isset($_POST['add_to_cart'])) {
                         </button>
                     </form> -->
 
-                    <form method='POST' class='space-y-4'>
+                    <form method='POST' class='space-y-4' <?php if($_SESSION['role'] !== 'user') echo "hidden"; ?>>
                         <?php if ($item['stock'] > 0) {
                             echo "<div>
                                 <label for='quantity' class='block text-sm font-medium text-gray-700 mb-2'>Quantity</label>

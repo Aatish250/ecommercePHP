@@ -1,4 +1,7 @@
 <?php
+session_start();
+require '../config/verify_session.php';
+verify_user("admin", "../");
 require '../config/db.php';
 
 // Initialize variables with safe defaults
@@ -7,8 +10,12 @@ $total_users = 0;
 $low_stock_products = array();
 $orders = array();
 
-if (!$conn) {
-    die('Database connection failed');
+
+// Total Sales AND Orders
+$res = mysqli_query($conn, "SELECT COUNT(*) as cnt, COALESCE(sum(total), 0) as sum_total FROM orders");
+if ($res && ($row = mysqli_fetch_assoc($res))) {
+    $total_orders = $row['cnt'];
+    $total_sales = $row['sum_total'];
 }
 
 // Total Products
@@ -82,7 +89,7 @@ if ($res) {
                     </span>
                     <div class="flex mb-1 md:flex-col w-full">
                         <span class="flex-1 ml-5 text-[18px] text-slate-700">Total Sales</span>
-                        <span class="mr-5 ml-5 font-bold text-2xl text-slate-500">Rs. 1200</span>
+                        <span class="mr-5 ml-5 font-bold text-2xl text-slate-500">Rs. <?php echo $total_sales; ?></span>
                     </div>
                 </div>
                 <!-- Total order -->
@@ -98,7 +105,7 @@ if ($res) {
                     </span>
                     <div class="flex mb-1 md:flex-col w-full">
                         <span class="flex-1 ml-5 text-[18px] text-slate-700">Total Orders</span>
-                        <span class="mr-5 ml-5 font-bold text-2xl text-slate-500">2</span>
+                        <span class="mr-5 ml-5 font-bold text-2xl text-slate-500"><?php echo $total_orders; ?></span>
                     </div>
                 </div>
                 <!-- total products -->

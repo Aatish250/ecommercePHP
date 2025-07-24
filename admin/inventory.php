@@ -11,64 +11,184 @@
 <body class="bg-slate-200">
     <?php
     session_start();
+    require '../config/verify_session.php';
+    verify_user("admin", "../");
     $active_page = 1;
     include '../components/admin_nav.php';
     include '../components/flashMessage.php';
 
     ?>
 
-    <div class="container m-auto p-3">
+    <div class="container m-auto ">
         <div class="flex justify-between items-center">
             <span class="text-indigo-900 text-3xl font-bold">Invenotry Management</span>
-            <button id="add-product" class="bg-blue-500 px-3 py-2 rounded-md text-white">Add New Product</button>
+            <button id="add-product" class="bg-blue-500 px-3 py-2 my-3 rounded-md text-white">Add New Product</button>
         </div>
 
         <!-- Add Product Form -->
-        <section>
-            <div id="addProductForm" class="bg-white rounded-lg shadow-md p-6 mb-2 mx-1 mt-4 hidden">
+        <section class="container m-auto px-3">
+            <div id="addProductForm" class="bg-white rounded-lg shadow-md p-6 mb-5 mx-2 hidden">
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">Add New Product</h2>
                 <form method="POST" enctype="multipart/form-data" action="proccess/add_product.php"
                     class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Product Name</label>
-                        <input type="text" name="name" required
+                        <input type="text" name="name" required autocomplete="off"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                        <input type="text" name="category" required
+                        <input type="text" name="category" required autocomplete="off"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Price</label>
-                        <input type="number" name="price" step="0.01" required
+                        <input type="number" name="price" step="0.01" required autocomplete="off"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Stock</label>
-                        <input type="number" name="stock" required
+                        <input type="number" name="stock" required autocomplete="off"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                        <textarea name="description" rows="3" required
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                    <div class="md:col-span-2 flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 items-start">
+                        <!-- Image Upload & Preview (Left Side, Larger) -->
+                        <div class="flex flex-col items-center md:order-1 order-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Image</label>
+                            <div 
+                                id="image-preview-container"
+                                class="w-56 h-56 border border-gray-300 rounded-md flex items-center justify-center bg-gray-100 overflow-hidden relative cursor-pointer"
+                                style="aspect-ratio: 1 / 1;"
+                            >
+                                <input 
+                                    type="file" 
+                                    name="image" 
+                                    id="product-image-input"
+                                    accept="image/*"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    style="z-index:2;"
+                                    onchange="previewProductImage(event)"
+                                >
+                                <img 
+                                    id="image-preview" 
+                                    src="" 
+                                    alt="Image Preview" 
+                                    class="object-cover w-full h-full hidden"
+                                    style="z-index:1;"
+                                >
+                                <span id="image-placeholder" class="text-gray-400 text-xs absolute">1:1 Preview</span>
+                            </div>
+                            <span class="text-xs text-gray-500 mt-2 cursor-pointer" id="click-to-select-file">Click image to select file</span>
+                        </div>
+                        <!-- Description (Right Side) -->
+                        <div class="flex-1 md:order-2 order-1 w-full">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                            <textarea name="description" rows="7" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+                            <div class="md:col-span-2 flex space-x-4">
+                                <button type="submit" name="add_product" value="add"
+                                    class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
+                                    Add Product
+                                </button>
+                                <button type="button" id="cancel-form" onclick="toggleAddForm()"
+                                    class="bg-gray-400 text-white px-6 py-2 rounded-lg hover:bg-gray-500">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="md:col-span-2 flex items-center">
-                        <label class="block w-22 text-sm font-medium text-gray-700 mb-2">Image URL</label>
-                        <input type="file" name="image"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                    <div class="md:col-span-2 flex space-x-4">
-                        <button type="submit" name="add_product" value="add"
-                            class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">
-                            Add Product
-                        </button>
-                        <button type="button" id="cancel-form" onclick="toggleAddForm()"
-                            class="bg-gray-400 text-white px-6 py-2 rounded-lg hover:bg-gray-500">
-                            Cancel
-                        </button>
-                    </div>
+                    <script>
+                        // Make both the image area and the "Click image to select file" text open the file dialog
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const imagePreviewContainer = document.getElementById('image-preview-container');
+                            const clickToSelectFile = document.getElementById('click-to-select-file');
+                            const fileInput = document.getElementById('product-image-input');
+                            const preview = document.getElementById('image-preview');
+                            const placeholder = document.getElementById('image-placeholder');
+
+                            imagePreviewContainer.addEventListener('click', function(e) {
+                                // Only trigger if the click is not on the file input itself
+                                if (e.target !== fileInput) {
+                                    fileInput.click();
+                                }
+                            });
+
+                            clickToSelectFile.addEventListener('click', function() {
+                                fileInput.click();
+                            });
+
+                            // Drag and drop support for images from browser (including internet sources)
+                            imagePreviewContainer.addEventListener('dragover', function(e) {
+                                e.preventDefault();
+                                imagePreviewContainer.classList.add('ring-2', 'ring-blue-400');
+                            });
+
+                            imagePreviewContainer.addEventListener('dragleave', function(e) {
+                                e.preventDefault();
+                                imagePreviewContainer.classList.remove('ring-2', 'ring-blue-400');
+                            });
+
+                            imagePreviewContainer.addEventListener('drop', function(e) {
+                                e.preventDefault();
+                                imagePreviewContainer.classList.remove('ring-2', 'ring-blue-400');
+                                // Handle file drop
+                                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                                    // If a file is dropped (from local)
+                                    fileInput.files = e.dataTransfer.files;
+                                    previewProductImage({ target: fileInput });
+                                } else if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+                                    // If an image is dragged from browser (internet source)
+                                    for (let i = 0; i < e.dataTransfer.items.length; i++) {
+                                        const item = e.dataTransfer.items[i];
+                                        if (item.kind === 'string' && item.type === 'text/uri-list') {
+                                            item.getAsString(function(url) {
+                                                // Fetch the image as a blob, then create a File and set it to the input
+                                                fetch(url)
+                                                    .then(response => response.blob())
+                                                    .then(blob => {
+                                                        // Try to get the filename from the URL
+                                                        let filename = url.split('/').pop().split('?')[0];
+                                                        // If no extension, default to .png
+                                                        if (!/\.(jpe?g|png|gif|bmp|webp)$/i.test(filename)) {
+                                                            filename += '.png';
+                                                        }
+                                                        const file = new File([blob], filename, { type: blob.type });
+                                                        // Create a DataTransfer to set the file input
+                                                        const dt = new DataTransfer();
+                                                        dt.items.add(file);
+                                                        fileInput.files = dt.files;
+                                                        previewProductImage({ target: fileInput });
+                                                    })
+                                                    .catch(() => {
+                                                        alert('Failed to fetch image from the internet source.');
+                                                    });
+                                            });
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+                        });
+
+                        function previewProductImage(event) {
+                            const input = event.target;
+                            const preview = document.getElementById('image-preview');
+                            const placeholder = document.getElementById('image-placeholder');
+                            if (input.files && input.files[0]) {
+                                const reader = new FileReader();
+                                reader.onload = function(e) {
+                                    preview.src = e.target.result;
+                                    preview.classList.remove('hidden');
+                                    placeholder.style.display = 'none';
+                                }
+                                reader.readAsDataURL(input.files[0]);
+                            } else {
+                                preview.src = '';
+                                preview.classList.add('hidden');
+                                placeholder.style.display = '';
+                            }
+                        }
+                    </script>
                 </form>
             </div>
             <script>

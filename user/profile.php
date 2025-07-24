@@ -1,8 +1,10 @@
 
 <?php
     session_start();
+    require '../config/verify_session.php';
+    verify_user("user", "../");
     require '../config/db.php';
-    $user_id = "1";
+    $user_id = $_SESSION['user_id'];
 
     $userResult = mysqli_query($conn, "Select * from user_details where user_id = $user_id");
     $user = mysqli_fetch_assoc($userResult);
@@ -33,6 +35,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php require '../components/link_imports.php' ?>
+    
     <title>Profile</title>
 </head>
 

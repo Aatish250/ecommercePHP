@@ -13,6 +13,8 @@
     <?php
 
     session_start();
+    require '../config/verify_session.php';
+    verify_user("user", "../");
     $active_page = 1;
     include '../components/user_nav.php';
     include '../components/flashMessage.php';
@@ -158,7 +160,7 @@
             });
             $("input[name='selected_cart_id']").val(selectedValues);
 
-            userId = 1;
+            userId = <?php echo $_SESSION['user_id']; ?>;
 
             console.log(selectedValues);
 

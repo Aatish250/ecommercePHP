@@ -1,4 +1,7 @@
 <?php
+session_start();
+require '../config/verify_session.php';
+verify_user("admin", "../");
 require '../config/db.php';
 $active_page = 2; // For nav highlighting
 include '../components/admin_nav.php';

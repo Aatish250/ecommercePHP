@@ -16,8 +16,8 @@
     include '../components/flashMessage.php';
     require '../config/db.php';
 
-    $user_id = "1"; // to be changed later
-    $order_id = $_GET['order_id']; // to be changed later
+    $user_id = $_SESSION['user_id'];
+    $order_id = $_GET['order_id'];
 
 
     $orderDetail = "SELECT * FROM orders where order_id=$order_id and user_id = $user_id";

@@ -46,31 +46,30 @@ if (isset($_POST['showData']) && $_POST["showData"]) {
             $stock = $row['stock'];
             $category = $row['category'];
             $description = $row['description'];
-            $img_id = $row['img_id'];
-
-            $img_result = mysqli_query($conn, "SELECT * FROM image where img_id = $img_id");
-            $img_db = mysqli_fetch_assoc($img_result);
-            $img_path = "../img/product/" . $img_db['image'];
+            $img_path = "../img/product/" . $row['image'];
 
             echo "
                 <div id='item' class='bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow'>
-                <img src='$img_path' class='w-full h-48 object-cover'>
+                <a href='product_detail.php?product_id=$product_id&search=$search&previous-category=$selectedCategory' class='group'>
+                    <img src='$img_path' class='w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105'>
+                </a>
         
                 <div class='p-4'>
                     <h3 class='text-lg font-semibold text-gray-800 mb-2'>
-                    $product_name
+                        $product_name
                     </h3>
-                    <p class='text-gray-600 text-sm mb-3 line-clamp-3'>
-                        $description
-                    </p>
+                    <div class='flex justify-between items-center mb-2'>
+                        <span class='text-sm text-gray-500'>
+                            Category: <span class='font-medium text-gray-700'>$category</span>
+                        </span>
+                        <span class='text-sm text-gray-500'>
+                            Stock: <span class='font-medium text-gray-700'>$stock</span>
+                        </span>
+                    </div>
                     <div class='flex justify-between items-center'>
-                    <span class='text-xl font-bold text-indigo-600'>
-                    Rs. $product_price
-                    </span>
-                    <a href='product_detail.php?product_id=$product_id&search=$search&previous-category=$selectedCategory'
-                    class='bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition-colors'>
-                    View Details
-                    </a>
+                        <span class='text-xl font-bold text-indigo-600'>
+                            Rs. $product_price
+                        </span>
                     </div>
                 </div>
                 </div>

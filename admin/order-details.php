@@ -1,7 +1,9 @@
 <?php
     
-    require_once '../config/db.php';
     session_start();
+    require '../config/verify_session.php';
+    verify_user("admin", "../");
+    require_once '../config/db.php';
     $order_id = $_GET['order_id'];
     
     $order = ($res = mysqli_query($conn, "SELECT * FROM orders WHERE order_id = $order_id")) ? mysqli_fetch_assoc($res) : exit();

@@ -18,7 +18,7 @@
     include '../components/flashMessage.php';
     require '../config/db.php';
 
-    $user_id = "1"; // to be changed later
+    $user_id = $_SESSION['user_id'];
     $order_id = $_GET['order_id']; // to be changed later
 
 

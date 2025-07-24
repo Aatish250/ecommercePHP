@@ -71,18 +71,14 @@ $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
 
     while ($row = mysqli_fetch_assoc($result)) {
-        $imgsql = "SELECT * from image where img_id = " . $row['img_id'];
-        $img_result = mysqli_query($conn, $imgsql);
-        $img_row = mysqli_fetch_assoc($img_result);
         ?>
 
         <tr data-product-id="<?php echo $row['product_id'] ?>">
             <td class="pl-2 w-16 h-16">
-                <img src="../img/product/<?php echo $img_row['image'] ?>" alt="../img/product/<?php echo $img_row['image'] ?>"
+                <img src="../img/product/<?php echo $row['image'] ?>" alt="../img/product/<?php echo $row['image'] ?>"
                     class="object-cover rounded-md">
             </td>
             <td class="p-2 font-medium text-gray-900">
-                <?php echo $row['img_id'] . " Img id"; ?>
                 <div class="flex flex-col">
                     <?php
                     echo $row['product_name'];

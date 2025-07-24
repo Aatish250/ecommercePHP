@@ -11,6 +11,8 @@
     <?php
 
     session_start();
+    require '../config/verify_session.php';
+    verify_user("user", "../");
     $active_page = 1;
     include '../components/user_nav.php';
     include '../components/flashMessage.php';
@@ -26,7 +28,7 @@
 
 
     // session data
-    $user_id = "1"; // to be changed later
+    $user_id = $_SESSION['user_id'];
 
     if($res = mysqli_query($conn,"SELECT * FROM users WHERE user_id = $user_id"))
      $user = mysqli_fetch_assoc($res);

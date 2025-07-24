@@ -24,9 +24,14 @@
     <?php
     session_start();
     $active_page = 0;
+    if(!isset($_SESSION['role']) && !isset($_SESSION['user_id'])){
+        echo "No session";
+        $_SESSION['role'] = "Guest";
+        $_SESSION['user_id'] = "";
+    }
     include '../components/user_nav.php';
     include '../components/flashMessage.php';
-
+    
     ?>
 
 
@@ -81,6 +86,7 @@
         <?php
         if (isset($_SESSION['message-status']) && isset($_SESSION['message'])) {
             echo "setFlashMessage('" . $_SESSION['message-status'] . "','" . $_SESSION['message'] . "')";
+            unset($_SESSION['message-status'],$_SESSION['message']);
         }
         ?>
     }
@@ -109,6 +115,5 @@
 
     });
 </script>
-<?php session_unset(); ?>
 
 </html>

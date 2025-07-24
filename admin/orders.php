@@ -11,6 +11,9 @@
 
 <body class="bg-slate-200">
     <?php
+    session_start();
+    require '../config/verify_session.php';
+    verify_user("admin", "../");
     $active_page = 3;
     include '../components/admin_nav.php';
     include '../components/flashMessage.php';
