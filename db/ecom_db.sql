@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 24, 2025 at 11:07 AM
+-- Generation Time: Jul 25, 2025 at 08:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -69,6 +69,8 @@ CREATE TABLE `orders` (
   `payment_method` enum('cod','khalti') DEFAULT 'cod',
   `payment_status` enum('pending','paid','failed') DEFAULT 'pending',
   `khalti_token` varchar(255) DEFAULT NULL,
+  `khalti_pidx` varchar(255) DEFAULT NULL,
+  `khalti_transaction_id` varchar(255) DEFAULT NULL,
   `notes` text DEFAULT NULL,
   `admin_notes` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -93,6 +95,7 @@ CREATE TABLE `order_details` (
 ,`order_price` decimal(10,2)
 ,`quantity` int(11)
 ,`sub_total` decimal(15,0)
+,`payment_status` enum('pending','paid','failed')
 );
 
 -- --------------------------------------------------------
@@ -152,7 +155,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `shipping_address`, `phone`, `gender`, `dob`, `role`, `status`, `created_at`, `last_logged_in`) VALUES
-(1, 'admin', 'admin@ecom.localhost', 'password', '', NULL, 'male', NULL, 'user', 'active', '2025-07-24 09:00:18', NULL);
+(1, 'admin', 'admin@ecom.localhost', '$2y$10$K1ddNLI8t1hLJmtenU6.nudZm5t1bEfTRF7cLWoJM6wRBmT6SGfhO', '', NULL, 'male', NULL, 'admin', 'active', '2025-07-24 09:00:18', '2025-07-25 06:55:26'),
+(2, 'Aatish Machamasi', 'machamasi321@gmail.com', '$2y$10$ggBA.YyxV4fxWQnw/ibeL.V5aV/lwBxVo9AsU09tD6a4ZL6EMTWpa', 'Bhaktapur', '9841693432', 'male', NULL, 'user', 'active', '2025-07-24 09:18:33', '2025-07-25 06:55:16');
 
 -- --------------------------------------------------------
 
@@ -196,7 +200,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `order_details`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `order_details`  AS SELECT `o`.`user_id` AS `user_id`, `o`.`order_id` AS `order_id`, `oi`.`order_item_id` AS `order_item_id`, `oi`.`product_id` AS `product_id`, `p`.`product_name` AS `product_name`, `p`.`image` AS `image`, `p`.`category` AS `category`, `p`.`stock` AS `current_stock`, `oi`.`order_price` AS `order_price`, `oi`.`quantity` AS `quantity`, `oi`.`sub_total` AS `sub_total` FROM ((`orders` `o` join `order_items` `oi` on(`o`.`order_id` = `oi`.`order_id`)) join `products` `p` on(`p`.`product_id` = `oi`.`product_id`)) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `order_details`  AS SELECT `o`.`user_id` AS `user_id`, `o`.`order_id` AS `order_id`, `oi`.`order_item_id` AS `order_item_id`, `oi`.`product_id` AS `product_id`, `p`.`product_name` AS `product_name`, `p`.`image` AS `image`, `p`.`category` AS `category`, `p`.`stock` AS `current_stock`, `oi`.`order_price` AS `order_price`, `oi`.`quantity` AS `quantity`, `oi`.`sub_total` AS `sub_total`, `o`.`payment_status` AS `payment_status` FROM ((`orders` `o` join `order_items` `oi` on(`o`.`order_id` = `oi`.`order_id`)) left join `products` `p` on(`p`.`product_id` = `oi`.`product_id`)) ;
 
 -- --------------------------------------------------------
 
@@ -278,7 +282,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
