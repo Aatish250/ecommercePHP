@@ -30,24 +30,24 @@ if (isset($_POST['delete_product_id'])) {
     
     
     $productId = mysqli_real_escape_string($conn, $_POST['delete_product_id']);
-    $result = mysqli_query($conn, "DELETE FROM products WHERE product_id = '$productId'");
     $image = ($res = $conn->query("SELECT image FROM products WHERE product_id = $productId")) ? $res->fetch_assoc() : [];
-    $image_path = "../../img/product/".$image['image'];
-    if ($result) {
-        if(file_exists($image_path)){
-            $_SESSION['message-status'] = "success";
-            if(unlink($image_path)) 
-                $_SESSION['message-status'] = "success";
-            $_SESSION['message'] = "Successfully Deleted product Id: $productId";
-        }else {
-            $_SESSION['message-status'] = "fail";
-             $_SESSION['message'] = "Image File Not Found";
-        }
-    } else {
-        http_response_code(500);
+    $image_path = "../../img/product/".$image['image'];          //  if(unlink($image_path)) {
+        
+    $result = mysqli_query($conn, "DELETE FROM products WHERE product_id = '$productId'");
+    if($result){
         $_SESSION['message-status'] = "fail";
-        $_SESSION['message'] = "Error deleting product";
+         $_SESSION['message'] = "only delete form data base result status: $result | does file exist? " . file_exists($image_path);
+         if(unlink($image_path)){
+                 $_SESSION['message-status'] = "success";
+                 $_SESSION['message'] = "Successfully Deleted product Id: $productId and deleted $image_path";
+             }
+         else {
+             $_SESSION['message-status'] = "fail";
+              $_SESSION['message'] = "Image File Not Found";
+         }
     }
+
+    
     exit();
 }
 
