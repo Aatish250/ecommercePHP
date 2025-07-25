@@ -23,37 +23,6 @@ if (isset($_POST['add_product']) && $_POST['add_product'] == 'add') {
     $folder_path = "../../img/product/";
     $new_img_path = $folder_path . $file_name;
     
-    // if(!empty($file_name)){
-
-    //     $sql_img = " INSERT INTO `image`(`image`) VALUES ('$file_name')";
-    //     $result = mysqli_query($conn, $sql_img);
-        
-    //     if ($result) {
-    //         $_SESSION['message-status'] = "success";
-    //         $_SESSION['message'] = "LOADED ADD_PRODUCT IMAGE ADD";
-    //         $last_id = mysqli_insert_id($conn);
-            
-    //         $sql_product = "INSERT INTO `products`
-    //         (`product_name`, `product_price`, `category`, `stock`, `description`, `img_id`)
-    //         VALUES ('$name','$price', '$category','$stock','$description','$last_id')";
-    //         $result = mysqli_query($conn, $sql_product);
-    //         if ($result) {
-                
-    //             if (move_uploaded_file($file_tmp, $new_img_path)) {
-    //                 $_SESSION['message-status'] = "success";
-    //                 $_SESSION['message'] = "Product detail added successfully FROM INSERT RESULT";
-    //             }
-                
-    //         }
-    //     } else {
-    //         $_SESSION['message-status'] = "fail";
-    //         $_SESSION['message'] = "Fail to insert image to table with file: $file_name";  
-    //     }
-    // }else {
-    //     $_SESSION['message-status'] = "fail";
-    //     $_SESSION['message'] = "Fail to get image";  
-    // }
-    
     if(!empty($file_name)){
 
         $sql_product = "INSERT INTO `products`
@@ -67,23 +36,19 @@ if (isset($_POST['add_product']) && $_POST['add_product'] == 'add') {
                 $_SESSION['message'] = "Product detail added successfully FROM INSERT RESULT";
             }
             
-        }else {
-            $_SESSION['message-status'] = "fail";
-            $_SESSION['message'] = "Error: $sql_product";  
         }
-        echo $sql_product;
-        
-        $_SESSION['message-status'] = "success";
-        $_SESSION['message'] = "reding here: $sql_product"; 
 
-    }else {
-        $_SESSION['message-status'] = "fail";
-        $_SESSION['message'] = "Fail to get image";  
     }
 
 }
 if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
-    header('Location: ' . $_SERVER['HTTP_REFERER']);
+
+    echo (session_status() === PHP_SESSION_NONE) ? "No SESSION" : "YES SESSION";
+    echo "<br> message: ".$_SESSION['message'];
+    echo "<br> message-status: ".$_SESSION['message-status'];
+    echo "<br>";
+    echo "<a href='".$_SERVER['HTTP_REFERER']."'>".$_SERVER['HTTP_REFERER']."</a>";
+    // header('Location: ' . $_SERVER['HTTP_REFERER']);
 
     // $_SESSION['message-status'] = "success";
     // $_SESSION['message'] = "Created product successfully FROM HTTP REFFER";

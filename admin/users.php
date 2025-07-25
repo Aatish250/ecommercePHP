@@ -82,7 +82,6 @@
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Total Spent</th>
                                 <th
-                                    colspan="2"
                                     class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Actions</th>
                             </tr>
@@ -102,13 +101,15 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                                <span class="text-indigo-600 font-medium text-sm">
-                                                    <?php echo strtoupper(substr($user['username'], 0, 2)); ?>
-                                                </span>
+                                        <a href="user-profile.php?user_id=<?php echo $user['user_id']; ?>" class="group inline-flex items-center justify-center" title="View Profile">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                                    <span class="text-indigo-600 font-medium text-sm">
+                                                        <?php echo ucfirst(substr($user['username'], 0, 2)); ?>
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                         <div class="ml-4">
                                             <div class="text-sm font-medium text-gray-900">
                                                 <?php echo htmlspecialchars($user['username']); ?>
@@ -139,16 +140,6 @@
                                             <?php echo $status === 'active' ? 'Deactivate' : 'Activate'; ?>
                                         </button>
                                     </form>
-                                </td>
-                                <td>
-                                    <a href="user-profile.php?user_id=<?php echo $user['user_id']; ?>" class="group inline-flex items-center justify-center" title="View Profile">
-                                        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 transition-colors duration-200 group-hover:bg-blue-500">
-                                            <svg class="w-6 h-6 text-blue-500 transition-colors duration-200 group-hover:text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                                                <circle cx="12" cy="9" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
-                                                <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 19c0-2.21 2.91-4 6-4s6 1.79 6 4"/>
-                                            </svg>
-                                        </span>
-                                    </a>
                                 </td>
                             </tr>
                         <?php

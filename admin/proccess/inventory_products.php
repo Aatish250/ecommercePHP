@@ -27,42 +27,30 @@ if (isset($_POST['update_product_id']) && isset($_POST['new_stock_value'])) {
 }
 
 if (isset($_POST['delete_product_id'])) {
-
+    
+    
     $productId = mysqli_real_escape_string($conn, $_POST['delete_product_id']);
-
     $result = mysqli_query($conn, "DELETE FROM products WHERE product_id = '$productId'");
+    $image = ($res = $conn->query("SELECT image FROM products WHERE product_id = $productId")) ? $res->fetch_assoc() : [];
+    $image_path = "../../img/product/".$image['image'];
     if ($result) {
-        $_SESSION['message-status'] = "success";
-        $_SESSION['message'] = "Successfully Deleted product Id: $productId";
+        if(file_exists($image_path)){
+            $_SESSION['message-status'] = "success";
+            if(unlink($image_path)) 
+                $_SESSION['message-status'] = "success";
+            $_SESSION['message'] = "Successfully Deleted product Id: $productId";
+        }else {
+            $_SESSION['message-status'] = "fail";
+             $_SESSION['message'] = "Image File Not Found";
+        }
     } else {
         http_response_code(500);
-        $_SESSION['message-status'] = "danger";
-        $_SESSION['message'] = "Error deleting";
+        $_SESSION['message-status'] = "fail";
+        $_SESSION['message'] = "Error deleting product";
     }
     exit();
 }
 
-
-
-// $_POST['delete_product_id'] = 1;
-
-if (isset($_POST['delete_product_id'])) {
-
-    $productId = mysqli_real_escape_string($conn, $_POST['delete_product_id']);
-
-
-    // $result = mysqli_query($conn, "Delete from products WHERE id = $productId");
-    // if($result)
-    //     echo "Deleted: $productId";
-    // else{
-    //     http_response_code(500);
-    //     echo "Error deleting..";
-    // }
-
-    echo "<img src='../../img/product/'>";
-
-    exit();
-}
 
 
 
@@ -127,13 +115,5 @@ if (mysqli_num_rows($result) > 0) {
 ?>
 
 <?php
-if (isset($_SESSION['message-status']) && isset($_SESSION['message'])) {
-    ?>
-    <script>
-        setFlashMessage("<?php echo $_SESSION['message-status'] ?>", "<?php echo $_SESSION['message'] ?>");
-    </script>
-    <?php
-}
-unset($_SESSION['message-ststus']);
-unset($_SESSION['message']);
+    include "../../components/show_flash_message.php";
 ?>

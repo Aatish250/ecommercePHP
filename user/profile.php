@@ -12,20 +12,20 @@
     $orderDetail = "SELECT * FROM orders where user_id = $user_id";
     $orderDetailResult = mysqli_query($conn, $orderDetail);
     
-    if($orderDetailResult){
+    // if($orderDetailResult){
         
-        if(mysqli_num_rows($orderDetailResult) > 0){
-            $order_count = 0;
-            while($row = mysqli_fetch_assoc($orderDetailResult)){
-                $orders[] = $row;
-            }
-        } 
-        else {
-            echo "No correct redirection";
-            exit();
-        }
+    //     if(mysqli_num_rows($orderDetailResult) > 0){
+    //         $order_count = 0;
+    //         while($row = mysqli_fetch_assoc($orderDetailResult)){
+    //             $orders[] = $row;
+    //         }
+    //     } 
+    //     else {
+    //         echo "No correct redirection";
+    //         exit();
+    //     }
 
-    }
+    // }
 ?>
 
 <!DOCTYPE html>

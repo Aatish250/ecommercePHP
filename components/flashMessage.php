@@ -22,9 +22,10 @@
             $("#flash-mesg").animate({
                 width: 'toggle'
             });
-        }, 3000);
+        }, 3500);
     }
 
     console.log("Flahs Message script loaded");
     
 </script>
+
