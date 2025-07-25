@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 25, 2025 at 08:56 AM
+-- Generation Time: Jul 25, 2025 at 06:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -155,7 +155,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `shipping_address`, `phone`, `gender`, `dob`, `role`, `status`, `created_at`, `last_logged_in`) VALUES
-(1, 'admin', 'admin@ecom.localhost', '$2y$10$K1ddNLI8t1hLJmtenU6.nudZm5t1bEfTRF7cLWoJM6wRBmT6SGfhO', '', NULL, 'male', NULL, 'admin', 'active', '2025-07-24 09:00:18', '2025-07-25 06:55:26'),
+(1, 'admin', 'admin@ecom.localhost', '$2y$10$K1ddNLI8t1hLJmtenU6.nudZm5t1bEfTRF7cLWoJM6wRBmT6SGfhO', '', NULL, 'male', NULL, 'admin', 'active', '2025-07-24 09:00:18', '2025-07-25 14:10:38'),
 (2, 'Aatish Machamasi', 'machamasi321@gmail.com', '$2y$10$ggBA.YyxV4fxWQnw/ibeL.V5aV/lwBxVo9AsU09tD6a4ZL6EMTWpa', 'Bhaktapur', '9841693432', 'male', NULL, 'user', 'active', '2025-07-24 09:18:33', '2025-07-25 06:55:16');
 
 -- --------------------------------------------------------

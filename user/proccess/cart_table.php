@@ -4,6 +4,30 @@ require '../../config/db.php';
 session_start();
 $user_id = $_SESSION['user_id'];
 
+// scan from cart_detail view
+$cartDetailQuery = "SELECT * FROM cart_details WHERE user_id = $user_id";
+$cartDetailResult = mysqli_query($conn, $cartDetailQuery);
+
+// fetch data form cart_details and store it in _cart_details
+while ($row = mysqli_fetch_assoc($cartDetailResult)) $cart_details[] = $row;
+    
+// checks if each items asre in stok and if not set allQuantityInRang to false
+function checkCartQuantityInRange($cart){
+    if($cart['stock'] >= $cart['quantity'] && $cart['stock'] != 0){
+        return true;
+    }
+}
+
+// checks if particualr cart has stock else set checkAllWauantityInRang o false
+// $checkAllQuantityInRange = true;
+// foreach ($cart_details as $cart){
+//     if (checkCartQuantityInRange($cart)) {
+//     } else {
+//         $checkAllQuantityInRange = false;
+//     }
+// }
+
+
 if (isset($_POST['update_product_id']) && isset($_POST['new_stock_value'])) {
 
     $productId = mysqli_real_escape_string($conn, $_POST['update_product_id']);
@@ -148,7 +172,7 @@ if (isset($_POST['show_data'])) {
                     </div>
                 </td>
                 <td class="pl-2 w-24 h-24">
-                    <img src="<?php echo $img_path; ?>" alt="<?php echo $img_db['image']; ?>" class="object-cover rounded-md">
+                    <img src="<?php echo $img_path; ?>" alt="<?php echo $cartRow['image']; ?>" class="object-cover rounded-md">
                 </td>
                 <td class="p-2 font-medium text-gray-900">
                     <?php echo $product_name; ?>
@@ -156,11 +180,14 @@ if (isset($_POST['show_data'])) {
                 <td class="text-sm text-gray-500 text-center">
                     Rs.<?php echo $product_price; ?>
                 </td>
-                <td class="whitespace-nowrap">
-                    <div class="flex justify-center">
+                <td class="whitespace-nowrap text-center">
+                    <div class="flex flex-col items-center justify-center">
                         <input type="hidden" name="previous_quantity" value="<?php echo $selected_quantity ?>">
                         <input type="number" name="new_quantity" value="<?php echo $selected_quantity; ?>" min="0"
-                            max="<?php echo $db_stock; ?>" class="w-12 py-1 border border-gray-300 rounded text-center">
+                            max="<?php echo $db_stock; ?>" class="w-12 py-1 border border-gray-300 rounded text-center mx-auto">
+                        <?php if(!checkCartQuantityInRange($cartRow)): ?>
+                            <span class="text-red-600 text-xs bg-red-200 px-2 py-0.5 rounded-full mt-1 block text-center">Available: <?php echo $cartRow['stock']; ?></span>
+                        <?php endif; ?>
                     </div>
                 </td>
                 <td class="text-sm text-gray-500 text-center">

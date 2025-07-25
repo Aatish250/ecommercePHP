@@ -1,0 +1,5 @@
+{
+    "require": {
+        "xentixar/khalti-sdk": "^1.0"
+    }
+}

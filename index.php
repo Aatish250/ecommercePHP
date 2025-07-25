@@ -207,11 +207,38 @@
                 </span>
             </div>
             <button type="submit" class="bg-indigo-500 p-2 rounded-md text-white mt-5">Login</button>
-            <div class="mt-4 text-center text-gray-400 flex flex-col items-center">
+            <div class="mt-4 text-center text-gray-400 flex justify-center space-x-1 items-center">
                 <span>No account?</span>
                 <a href="javascript:void(0);" id="showSignup" class="underline text-indigo-400 hover:text-white mt-1">Sign up</a>
             </div>
+            <div class="bg-gray-300 h-1"></div>
+            <div class="text-sm text-gray-400 flex flex-col items-center">
+                <span id='adminEmail'>admin@ecom.localhost</span>
+                <span id='adminPassword'>password</span>
+                <button type="button" id="adminAccountBtn" class="border border-gray-400 bg-white text-gray-400 hover:bg-gray-100 hover:text-gray-600 rounded px-3 py-1 my-2 shadow-sm transition cursor-pointer">Login as Admin Account</button>
+            </div>
         </form>
+        <script>
+        // Admin Account autofill logic
+        document.addEventListener('DOMContentLoaded', function() {
+            var adminBtn = document.getElementById('adminAccountBtn');
+            if (adminBtn) {
+                adminBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var email = document.getElementById('adminEmail').textContent.trim();
+                    var password = document.getElementById('adminPassword').textContent.trim();
+                    var emailInput = document.getElementById('email');
+                    var passwordInput = document.getElementById('password');
+                    if (emailInput && passwordInput) {
+                        emailInput.value = email;
+                        passwordInput.value = password;
+                        // Optionally focus the email or password field
+                        passwordInput.focus();
+                    }
+                });
+            }
+        });
+        </script>
         <!-- Signup Form -->
         <form id="signupForm" method="POST"
             class="bg-white py-4 px-8 rounded-lg w-90 flex flex-col md:w-92 shadow-lg <?php echo ($show_form !== 'signup') ? 'hidden' : ''; ?><?php echo (!empty($signup_error)) ? ' form-tight' : ' gap-2'; ?>">
@@ -280,7 +307,7 @@
                 </span>
             </div>
             <button type="submit" class="bg-indigo-500 p-2 rounded-md text-white mt-5">Signup</button>
-            <div class="mt-4 text-center text-gray-400 flex flex-col items-center">
+            <div class="mt-4 text-center text-gray-400 flex justify-center space-x-1 items-center">
                 <span>Already have an account?</span>
                 <a href="javascript:void(0);" id="showLogin" class="underline text-indigo-400 hover:text-white mt-1">Login</a>
             </div>

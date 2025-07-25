@@ -1,0 +1,16 @@
+{
+    "name": "xentixar/khalti-sdk",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Xentixar\\KhaltiSdk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "xentixar",
+            "email": "xentixar@gmail.com"
+        }
+    ],
+    "require": {}
+}

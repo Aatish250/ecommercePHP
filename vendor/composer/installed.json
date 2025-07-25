@@ -1,0 +1,45 @@
+{
+    "packages": [
+        {
+            "name": "xentixar/khalti-sdk",
+            "version": "v1.0.0",
+            "version_normalized": "1.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xentixar/khalti-sdk.git",
+                "reference": "54353cfefa99c5cb5b091e925efec8f2cb97a87a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xentixar/khalti-sdk/zipball/54353cfefa99c5cb5b091e925efec8f2cb97a87a",
+                "reference": "54353cfefa99c5cb5b091e925efec8f2cb97a87a",
+                "shasum": ""
+            },
+            "time": "2024-06-18T16:59:05+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Xentixar\\KhaltiSdk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "xentixar",
+                    "email": "xentixar@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/xentixar/khalti-sdk/issues",
+                "source": "https://github.com/xentixar/khalti-sdk/tree/v1.0.0"
+            },
+            "install-path": "../xentixar/khalti-sdk"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

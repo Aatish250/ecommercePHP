@@ -1,0 +1,55 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "e81f88ed5f42c0b7a50aa12bb0c164fb",
+    "packages": [
+        {
+            "name": "xentixar/khalti-sdk",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xentixar/khalti-sdk.git",
+                "reference": "54353cfefa99c5cb5b091e925efec8f2cb97a87a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xentixar/khalti-sdk/zipball/54353cfefa99c5cb5b091e925efec8f2cb97a87a",
+                "reference": "54353cfefa99c5cb5b091e925efec8f2cb97a87a",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Xentixar\\KhaltiSdk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "xentixar",
+                    "email": "xentixar@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/xentixar/khalti-sdk/issues",
+                "source": "https://github.com/xentixar/khalti-sdk/tree/v1.0.0"
+            },
+            "time": "2024-06-18T16:59:05+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
+}
