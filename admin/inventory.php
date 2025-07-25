@@ -17,13 +17,6 @@
     include '../components/admin_nav.php';
     include '../components/flashMessage.php';
 
-    // if you want to show the fessage where the data are dynamically showened the you need tp put include inse the dynamically loaded block
-if(session_status() !== PHP_SESSION_NONE){
-    echo "Session Active";
-echo "<br>message-status: " . (isset($_SESSION['message-status']) ? $_SESSION['message-status'] : ''); 
-echo "<br>message: " . (isset($_SESSION['message']) ? $_SESSION['message'] : ''); 
-}
-
     ?>
 
 

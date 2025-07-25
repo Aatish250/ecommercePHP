@@ -33,7 +33,7 @@ if (isset($_POST['add_product']) && $_POST['add_product'] == 'add') {
             
             if (move_uploaded_file($file_tmp, $new_img_path)) {
                     $_SESSION['message-status'] = "success";
-                $_SESSION['message'] = "Product detail added successfully FROM INSERT RESULT";
+                $_SESSION['message'] = "Product Details Added";
             }
             
         }
@@ -48,7 +48,7 @@ if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
     echo "<br> message-status: ".$_SESSION['message-status'];
     echo "<br>";
     echo "<a href='".$_SERVER['HTTP_REFERER']."'>".$_SERVER['HTTP_REFERER']."</a>";
-    // header('Location: ' . $_SERVER['HTTP_REFERER']);
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
 
     // $_SESSION['message-status'] = "success";
     // $_SESSION['message'] = "Created product successfully FROM HTTP REFFER";
