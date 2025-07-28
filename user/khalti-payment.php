@@ -1,5 +1,5 @@
 <?php
-
+// khalti-payment.php
 // This line includes Composer's autoloader.
 // It's crucial because it makes the Khalti SDK classes available to your script.
 // The path is relative: '..' goes up one directory from 'user' to 'Ecom',
@@ -56,9 +56,24 @@ $khalti = new Khalti();
 // This key is vital for authenticating your payment requests with Khalti.
 $khalti->setSecretKey('c0086a41a71c499b91ffa67336cd9045');
 
-// --- These variables will hold the dynamic data for the payment. ---
-$websiteUrl = 'http://localhost/Ecom'; // Your website's base URL (e.g., 'http://localhost/Ecom').
-$returnUrl = $websiteUrl . '/user/khalti-callback.php?order_id=' . $order_id; // Khalti will redirect the user to this URL after payment.
+// --- Start Dynamic URL Generation ---
+// Get the scheme (http or https)
+$scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+
+// Get the host (e.g., localhost, 192.168.1.100, or yourdomain.com)
+$host = $_SERVER['HTTP_HOST'];
+
+// Define your base application path (relative to your web root)
+// This assumes 'Ecom' is directly under your web server's document root (e.g., htdocs)
+$base_app_folder = '/Ecom'; // No trailing slash here
+
+// Construct the dynamic base URL for your application
+$dynamic_website_base_url = $scheme . '://' . $host . $base_app_folder;
+// --- End Dynamic URL Generation ---
+
+// Now assign these dynamic URLs to the Khalti variables
+$websiteUrl = $dynamic_website_base_url;
+$returnUrl = $dynamic_website_base_url . '/user/khalti-callback.php?order_id=' . $order_id;
 
 // Configure the payment details for Khalti
 $khalti->config(
