@@ -138,33 +138,33 @@ homepage:
 <br>
 <a href="Detail Md/more_image.md" style="display: inline-block; padding: 10px 20px; background-color: #22272e; color: #adbac7; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 10px; border: 1px solid #373e47; box-shadow: 0 1px 0 #373e47;">🖼️ See More...</a>
 <br>
-
-📦 Dependencies
+<br>
+---
+## 📦 Dependencies
 This project relies on Composer to manage its PHP dependencies. The following key packages are required for the application to function correctly:
 
-Khalti SDK (xentixar/khalti-sdk): The official library for integrating the Khalti Payment Gateway. It handles the server-side communication for initiating and verifying transactions.
+ - Khalti SDK (xentixar/khalti-sdk): The official library for integrating the Khalti Payment Gateway. It handles the server-side communication for initiating and verifying transactions.
 
-PHPMailer (phpmailer/phpmailer): A robust library for sending emails, used here for features like email verification or order notifications.
+ - PHPMailer (phpmailer/phpmailer): A robust library for sending emails, used here for features like email verification or order notifications.
 
-Dotenv (vlucas/phpdotenv): (If you choose this method) A library for loading environment variables from a .env file, ensuring sensitive data is not committed to the repository.
+ - Dotenv (vlucas/phpdotenv): (If you choose this method) A library for loading environment variables from a .env file, ensuring sensitive data is not committed to the repository.
 
-To install them, simply run composer install after cloning the project.
+**To install them**, simply run composer install after cloning the project.
 
-👨‍💻 Author
-Aatish - Full Stack Developer
+---
+<br>
 
-🙏 Acknowledgments
-Khalti for payment gateway integration
+## 👨‍💻 Author
+ **Aatish** - Full Stack Developer
 
-Apache for Local/Web Hosting
+## 🙏 Acknowledgments
+ - Khalti for payment gateway integration
+ - Apache for Local/Web Hosting
+ - MySQL for database hosting
 
-MySQL for database hosting
-
-☎️ Support
+## ☎️ Support
 For support and questions:
-
-Create an issue in the GitHub repository
-
-Contact: machamasi321@gmail.com
-
-Note: This is a production-ready e-commerce platform with all essential features for running an online store. Make sure to configure all environment variables and payment credentials before deployment.
+ - Create an issue in the GitHub repository
+ - Contact: machamasi321@gmail.com
+---
+**Note:** This is a production-ready e-commerce platform with all essential features for running an online store. Make sure to configure all environment variables and payment credentials before deployment.
