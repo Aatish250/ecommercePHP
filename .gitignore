@@ -1,0 +1,10 @@
+# .gitignore
+# Ignore the vendor directory and Composer's cache files
+/vendor/
+/composer.lock
+
+# Ignore the file containing sensitive keys
+/config/secret_keys.php
+
+# Ignore Composer's cache and logs
+.composer.log
