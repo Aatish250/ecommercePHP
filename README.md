@@ -2,8 +2,7 @@
 
 This project `ecommercePHP` is a comprehensive **e-commerce platform** designed for both customers and administrators. It allows users to browse *products*, add items to a *shopping cart*, and place *orders*. Payments can be processed securely through the **Khalti digital wallet** integration, and administrators have tools to manage *product inventory*, track *sales*, and update *order statuses*.
 <br><br>
-For More **Detail System Explanation** visit :
-### [📑 Overview of ecommercePHP](Detail%20Md/Overview_of_ecommercePHP.md)
+For More **Detail** Explanation of System visit : **[Overview of ecommercePHP](Detail%20Md/Overview_of_ecommercePHP.md)** document.
 
 ## ✨ Features
 
@@ -108,21 +107,29 @@ To run this PHP project, you will need:
 <br>
 
 ## 🖼️ Project Preview
-Login Page:
-<img src="img/ss/login.png" alt="Login Page Preview">
----
-### Admin Interface 
 Dashboard:
 <img src="img/ss/admin-dashboard.png" alt="Login Page Preview">
-sales:
-<img src="img/ss/admin-sales.png" alt="Login Page Preview">
----
-### User Interface 
 homepage:
 <img src="img/ss/user-homepage.png" alt="Login Page Preview">
-profile:
-<img src="img/ss/user-profile.png" alt="Login Page Preview">
 <br>
 <a href="Detail Md/more_image.md" style="display: inline-block; padding: 10px 20px; background-color: #22272e; color: #adbac7; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 10px; border: 1px solid #373e47; box-shadow: 0 1px 0 #373e47;">🖼️ See More...</a>
+<br>
+## 👨‍💻 Author
+
+**Aatish** - Full Stack Developer
+
+## 🙏 Acknowledgments
+
+- Khalti for payment gateway integration
+- Appache for Local/Web Hosting
+- MYSQL for database hosting
+
+## ☎️ Support
+
+For support and questions:
+- Create an issue in the GitHub repository
+- Contact: machamasi321@gmail.com
 
 ---
+
+**Note**: This is a production-ready e-commerce platform with all essential features for running an online store. Make sure to configure all environment variables and payment credentials before deployment.
