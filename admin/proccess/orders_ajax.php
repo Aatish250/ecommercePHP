@@ -2,6 +2,18 @@
 require_once '../../config/db.php';
 header('Content-Type: application/json');
 
+// Delete order
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['action']) && $_POST['action'] === 'delete') {
+    $order_id = intval($_POST['order_id']);
+    // Optionally, you could check if the order exists first
+    $stmt = $conn->prepare("DELETE FROM orders WHERE order_id = ?");
+    $stmt->bind_param('i', $order_id);
+    $success = $stmt->execute();
+    $stmt->close();
+    echo json_encode(['success' => $success]);
+    exit;
+}
+
 // Update order status
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['new_status'])) {
     $order_id = intval($_POST['order_id']);

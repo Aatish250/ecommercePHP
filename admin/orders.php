@@ -70,6 +70,9 @@
                                 <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
                                 <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
                             </select>
+                            <button class="order-delete-btn bg-rose-400 text-white px-3 py-1 rounded ml-2 hover:bg-red-600 transition" type="button">
+                                <img src='../img/logo/delete.svg' class='w-6'>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -108,6 +111,21 @@
         });
     }
 
+    // Delete order via AJAX
+    function deleteOrder(order_id, cb) {
+        const formData = new FormData();
+        formData.append('order_id', order_id);
+        formData.append('action', 'delete');
+        fetch('proccess/orders_ajax.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (cb) cb(data);
+        });
+    }
+
     // Event listeners
     document.addEventListener('DOMContentLoaded', function() {
         fetchOrders();
@@ -126,6 +144,23 @@
                 updateOrderStatus(order_id, new_status, function(data) {
                     if (data.success) fetchOrders();
                 });
+            }
+        });
+
+        // Delegate delete button click
+        document.getElementById('orders-table-body').addEventListener('click', function(e) {
+            if (e.target.classList.contains('order-delete-btn')) {
+                const form = e.target.closest('.order-status-form');
+                const order_id = form.dataset.orderId;
+                if (confirm('Are you sure you want to delete #'+order_id+' this order? This action cannot be undone.')) {
+                    deleteOrder(order_id, function(data) {
+                        if (data.success) {
+                            fetchOrders();
+                        } else {
+                            alert(data.message || 'Failed to delete order.');
+                        }
+                    });
+                }
             }
         });
     });
