@@ -90,11 +90,21 @@
                 <div>
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Shipping Details</h2>
                     <div class="space-y-2">
-                        <p><span class="font-medium">Customer:</span> <?php echo "John Doe";//htmlspecialchars($order['user_name']); ?></p>
-                        <p><span class="font-medium">Phone:</span> <?php echo "9809916090";//htmlspecialchars($order['phone']); ?></p>
+                        <?php
+                            // Fetch username from users table using user_id
+                            $user_id = $order['user_id'];
+                            $username = '';
+                            $user_query = mysqli_query($conn, "SELECT username FROM users WHERE user_id = " . intval($user_id));
+                            if ($user_query && mysqli_num_rows($user_query) > 0) {
+                                $user_row = mysqli_fetch_assoc($user_query);
+                                $username = $user_row['username'];
+                            }
+                        ?>
+                        <p><span class="font-medium">Customer:</span> <?php echo htmlspecialchars($username); ?></p>
+                        <p><span class="font-medium">Phone:</span> <?php echo htmlspecialchars($order['phone']); ?></p>
                         <p><span class="font-medium">Address:</span></p>
                         <div class="text-gray-600 ml-4">
-                            <?php echo "Bhaktapur, Suryabinayak";//nl2br(htmlspecialchars($order['shipping_address'])); ?>
+                            <?php echo nl2br(htmlspecialchars($order['shipping_address'])); ?>
                         </div>
                         <?php if ($order['notes']): ?>
                             <p><span class="font-medium">Notes:</span> <?php echo htmlspecialchars($order['notes']); ?></p>
