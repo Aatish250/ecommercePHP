@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 25, 2025 at 06:39 PM
+-- Generation Time: Aug 23, 2025 at 07:08 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -17,8 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+--
 CREATE DATABASE IF NOT EXISTS `ecom_db`;
 USE `ecom_db`;
+--
 
 -- --------------------------------------------------------
 
@@ -149,14 +151,6 @@ CREATE TABLE `users` (
   `last_logged_in` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `users`
---
-
--- INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `shipping_address`, `phone`, `gender`, `dob`, `role`, `status`, `created_at`, `last_logged_in`) VALUES
--- (1, 'admin', 'admin@ecom.localhost', '$2y$10$K1ddNLI8t1hLJmtenU6.nudZm5t1bEfTRF7cLWoJM6wRBmT6SGfhO', '', NULL, 'male', NULL, 'admin', 'active', '2025-07-24 09:00:18', '2025-07-25 14:10:38'),
--- (2, 'Aatish Machamasi', 'machamasi321@gmail.com', '$2y$10$ggBA.YyxV4fxWQnw/ibeL.V5aV/lwBxVo9AsU09tD6a4ZL6EMTWpa', 'Bhaktapur', '9841693432', 'male', NULL, 'user', 'active', '2025-07-24 09:18:33', '2025-07-25 06:55:16');
-
 -- --------------------------------------------------------
 
 --
@@ -281,11 +275,17 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `fk_product_id` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `orders`
@@ -298,7 +298,7 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `order_items`
   ADD CONSTRAINT `fk_order_id` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_user_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_user_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
