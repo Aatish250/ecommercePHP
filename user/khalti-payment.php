@@ -6,6 +6,8 @@
 // The path is relative: '..' goes up one directory from 'user' to 'ecommercePHP',
 // and then 'vendor/autoload.php' is found there.
 require_once __DIR__ . '/../vendor/autoload.php';
+// Include the secret keys file
+require_once __DIR__ . '/../config/secret_keys.php';
 
 // Include your database connection file
 // Adjust path if your db.php is elsewhere relative to khalti-payment.php
@@ -55,7 +57,7 @@ $khalti = new Khalti();
 
 // --- IMPORTANT: Replace 'your_live_secret_key_here' with your actual Live Secret Key from test-admin.khalti.com ---
 // This key is vital for authenticating your payment requests with Khalti.
-$khalti->setSecretKey('c0086a41a71c499b91ffa67336cd9045');
+$khalti->setSecretKey($secretKeys['khalti']);
 
 // --- Start Dynamic URL Generation ---
 // Get the scheme (http or https)
