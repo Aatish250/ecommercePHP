@@ -1,8 +1,9 @@
 <?php
+
 // khalti-payment.php
 // This line includes Composer's autoloader.
 // It's crucial because it makes the Khalti SDK classes available to your script.
-// The path is relative: '..' goes up one directory from 'user' to 'Ecom',
+// The path is relative: '..' goes up one directory from 'user' to 'ecommercePHP',
 // and then 'vendor/autoload.php' is found there.
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -64,8 +65,8 @@ $scheme = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'ht
 $host = $_SERVER['HTTP_HOST'];
 
 // Define your base application path (relative to your web root)
-// This assumes 'Ecom' is directly under your web server's document root (e.g., htdocs)
-$base_app_folder = '/Ecom'; // No trailing slash here
+// This assumes 'ecommercePHP' is directly under your web server's document root (e.g., htdocs)
+$base_app_folder = '/'.basename(dirname(__DIR__)); // No trailing slash here
 
 // Construct the dynamic base URL for your application
 $dynamic_website_base_url = $scheme . '://' . $host . $base_app_folder;
