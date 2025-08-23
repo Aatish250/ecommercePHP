@@ -52,8 +52,9 @@ To run this PHP project, you will need:
    - Open `create_admin.php` via direct URL
    - Fill the provided form and submit.
 <br>
-<br>
+
 ## 📁 Directory Overview (Structure)
+
 ```
 .
 ├── change_password.php 
