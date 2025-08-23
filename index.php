@@ -211,12 +211,12 @@
                 <span>No account?</span>
                 <a href="javascript:void(0);" id="showSignup" class="underline text-indigo-400 hover:text-white mt-1">Sign up</a>
             </div>
-            <div class="bg-gray-300 h-1"></div>
+            <!-- <div class="bg-gray-300 h-1"></div>
             <div class="text-sm text-gray-400 flex flex-col items-center">
                 <span id='adminEmail'>admin@ecom.localhost</span>
                 <span id='adminPassword'>password</span>
                 <button type="button" id="adminAccountBtn" class="border border-gray-400 bg-white text-gray-400 hover:bg-gray-100 hover:text-gray-600 rounded px-3 py-1 my-2 shadow-sm transition cursor-pointer">Login as Admin Account</button>
-            </div>
+            </div> -->
         </form>
         <script>
         // Admin Account autofill logic
