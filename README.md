@@ -1,27 +1,25 @@
-# E-Commerce Web Application
+# 🛒 E-Commerce Web Application
 
-This project `ecommercePHP` project is a comprehensive **e-commerce platform** designed for both customers and administrators. It allows users to browse *products*, add items to a *shopping cart*, and place *orders*. Payments can be processed securely through the **Khalti digital wallet** integration, and administrators have tools to manage *product inventory*, track *sales*, and update *order statuses*.
+This project `ecommercePHP` is a comprehensive **e-commerce platform** designed for both customers and administrators. It allows users to browse *products*, add items to a *shopping cart*, and place *orders*. Payments can be processed securely through the **Khalti digital wallet** integration, and administrators have tools to manage *product inventory*, track *sales*, and update *order statuses*.
 <br><br>
-For More **Detail System Explanation** visit **[Overview of ecommercePHP](Detail%20Md/Overview_of_ecommercePHP)**
+For More **Detail System Explanation** visit :
+### [📑 Overview of ecommercePHP](Detail%20Md/Overview_of_ecommercePHP.md)
 
+## ✨ Features
 
-
-
-## Features
-
-- User registration and login
-- Product listing and details
-- Shopping cart
-- Order placement and order history
-- Admin dashboard for managing products and orders
-- Khalti Payment Gateway (KPG) integrated
-- Secrity: Password Hashing
-- Responsice Design
+- 👤 User registration and login
+- 🛍️ Product listing and details
+- 🛒 Shopping cart
+- 📦 Order placement and order history
+- 🛠️ Admin dashboard for managing products and orders
+- 💳 Khalti Payment Gateway (KPG) integrated
+- 🔒 Security: Password Hashing
+- 📱 Responsive Design
 <br>
+---
 <br>
-<br>
-# Getting Started
-<br>
+
+## 🚀 Getting Started
 To run this PHP project, you will need:
 
 - [XAMPP](https://www.apachefriends.org/index.html) (or any local server environment with Apache, PHP, and MySQL)
@@ -34,7 +32,7 @@ To run this PHP project, you will need:
 - Place the project folder inside the `htdocs` directory of your XAMPP installation.
 - Import the provided SQL file into your MySQL server.
   
-## Installation Guide
+## 🛠️ Installation Guide
 
 1. **Clone the repository:**
    ```
@@ -48,14 +46,16 @@ To run this PHP project, you will need:
    - Update database credentials in `config/db.php`.
 
 4. **Run the application:**
-   - Open [`http://localhost/ecommercePHP/`](http://localhost/ecommercePHP/) in your browser.
+   - Open [http://localhost/ecommercePHP/](http://localhost/ecommercePHP/) in your browser.
 
 5. **Create Admin Account:**
-<br>By default no admin account are created. To create a admin account follow the steps below:
+<br>By default, no admin account is created. To create an admin account, follow the steps below:
    - Open `create_admin.php` via direct URL
    - Fill the provided form and submit.
 <br>
-## Directory Overview (Structure)
+<br>
+## 📁 Directory Overview (Structure)
+```
 .
 ├── change_password.php 
 ├── create_admin.php            # For creating admin account
@@ -104,4 +104,25 @@ To run this PHP project, you will need:
 │   ├── user-profile.php
 │   └── users.php
 └── README.md
+```
+<br>
 
+## 🖼️ Project Preview
+Login Page:
+<img src="img/ss/login.png" alt="Login Page Preview">
+---
+### Admin Interface 
+Dashboard:
+<img src="img/ss/admin-dashboard.png" alt="Login Page Preview">
+sales:
+<img src="img/ss/admin-sales.png" alt="Login Page Preview">
+---
+### User Interface 
+homepage:
+<img src="img/ss/user-homepage.png" alt="Login Page Preview">
+profile:
+<img src="img/ss/user-profile.png" alt="Login Page Preview">
+<br>
+<a href="Detail Md/more_image.md" style="display: inline-block; padding: 10px 20px; background-color: #22272e; color: #adbac7; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 10px; border: 1px solid #373e47; box-shadow: 0 1px 0 #373e47;">🖼️ See More...</a>
+
+---

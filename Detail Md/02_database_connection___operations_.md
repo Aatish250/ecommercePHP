@@ -1,3 +1,4 @@
+<a href="Overview_of_ecommercePHP.md" style="display: inline-block; padding: 5px 10px; background-color: #22272e; color: #adbac7; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 10px; border: 1px solid #373e47; box-shadow: 0 1px 0 #373e47;">Go Back</a>
 # Chapter 2: Database Connection & Operations
 
 In [Chapter 1: Flash Message System](01_flash_message_system_.md), we learned how to give immediate, temporary feedback to users – like "Product added successfully!". That's great for quick messages, but what about the actual product? Where does the e-commerce store keep track of all its products, customer details, and past orders so they don't disappear when you close your browser or the server restarts?

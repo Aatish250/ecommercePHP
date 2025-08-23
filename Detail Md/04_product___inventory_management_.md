@@ -1,3 +1,4 @@
+<a href="Overview_of_ecommercePHP.md" style="display: inline-block; padding: 5px 10px; background-color: #22272e; color: #adbac7; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 10px; border: 1px solid #373e47; box-shadow: 0 1px 0 #373e47;">Go Back</a>
 # Chapter 4: Product & Inventory Management
 
 In [Chapter 3: User Session & Access Control](03_user_session___access_control_.md), we made sure only authorized people could access different parts of our e-commerce store. That's like having a security guard for our store. But what about the actual products we're selling? How do we put items on the shelves, change their prices, or mark them as "out of stock"?

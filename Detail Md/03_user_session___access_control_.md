@@ -1,3 +1,4 @@
+<a href="Overview_of_ecommercePHP.md" style="display: inline-block; padding: 5px 10px; background-color: #22272e; color: #adbac7; border-radius: 6px; text-decoration: none; font-weight: 600; margin-top: 10px; border: 1px solid #373e47; box-shadow: 0 1px 0 #373e47;">Go Back</a>
 # Chapter 3: User Session & Access Control
 
 In [Chapter 2: Database Connection & Operations](02_database_connection___operations_.md), we learned how our e-commerce store remembers everything – from products to customer accounts. But just because the information is *stored*, doesn't mean everyone should see or change it! Imagine walking into a physical store. The cashier won't just let you walk into the back room where they keep all the inventory and sales records, right?
