@@ -42,7 +42,7 @@
                 <input type="text" id="search-bar"
                     value="<?php echo isset($_SESSION['previous-search']) ? $_SESSION['previous-search'] : ''; ?>"
                     class="outline-1 outline-gray-300 rounded-lg w-full p-3"
-                    placeholder="Search by customer name, email, or order ID...">
+                    placeholder="Search by product name...">
                 <div class="flex space-x-2">
                     <select id="category-select"
                         class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none flex-1">

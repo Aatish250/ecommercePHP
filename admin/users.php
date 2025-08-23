@@ -130,7 +130,7 @@
                                     <?php echo (int)$user['total_orders']; ?>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    $<?php echo number_format($user['paid_total'], 2); ?>
+                                    <span class='text-md font-light text-gray-400'>Rs.</span><?php echo number_format($user['paid_total'], 2); ?>
                                 </td>
                                 <td class="px-6 w-3 py-4 whitespace-nowrap text-sm font-medium">
                                     <form method="POST" class="inline">

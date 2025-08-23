@@ -66,7 +66,7 @@
                     <div class="space-y-2">
                         <p><span class="font-medium">Order ID:</span> #<?php echo $order['order_id']; ?></p>
                         <p><span class="font-medium">Order Date:</span> <?php echo date('F j, Y', strtotime($order['created_at'])); ?></p>
-                        <p><span class="font-medium">Total Amount:</span> $<?php echo number_format($order['total'], 2); ?></p>
+                        <p><span class="font-medium">Total Amount:</span> Rs. <?php echo number_format($order['total'], 2); ?></p>
                         <p><span class="font-medium">Payment Method:</span> 
                             <?php if ($order['payment_method'] === 'khalti'): ?>
                                 <span class="inline-flex items-center">
@@ -116,11 +116,11 @@
                         <div class="flex-1">
                             <h3 class="font-medium text-gray-800"><?php echo htmlspecialchars($item['product_name']); ?></h3>
                             <p class="text-gray-600">Quantity: <?php echo $item['quantity']; ?></p>
-                            <p class="text-gray-600">Price: $<?php echo number_format($item['order_price'], 2); ?></p>
+                            <p class="text-gray-600">Price: Rs. <?php echo number_format($item['order_price'], 2); ?></p>
                         </div>
                         <div class="text-right">
                             <p class="font-semibold text-gray-800">
-                                $<?php echo number_format($item['order_price'] * $item['quantity'], 2); ?>
+                                Rs. <?php echo number_format($item['order_price'] * $item['quantity'], 2); ?>
                             </p>
                         </div>
                     </div>

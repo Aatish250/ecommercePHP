@@ -209,7 +209,7 @@ if ($res) {
                         </div>
                         <div class="flex flex-col items-center">
                             <div class="text-lg font-semibold text-gray-900">
-                                $<?php echo number_format($order['total'] ?? 0, 2); ?>
+                                <span class='text-md font-light text-gray-400'>Rs.</span><?php echo number_format($order['total'] ?? 0, 2); ?>
                             </div>
                             <div class="<?php echo $status_class; ?> px-3 py-1 rounded-full text-sm font-medium">
                                 <?php echo ucfirst($status); ?>

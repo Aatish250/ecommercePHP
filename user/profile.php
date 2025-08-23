@@ -12,20 +12,20 @@
     $orderDetail = "SELECT * FROM orders where user_id = $user_id";
     $orderDetailResult = mysqli_query($conn, $orderDetail);
     
-    // if($orderDetailResult){
+    if($orderDetailResult){
         
-    //     if(mysqli_num_rows($orderDetailResult) > 0){
-    //         $order_count = 0;
-    //         while($row = mysqli_fetch_assoc($orderDetailResult)){
-    //             $orders[] = $row;
-    //         }
-    //     } 
-    //     else {
-    //         echo "No correct redirection";
-    //         exit();
-    //     }
+        if(mysqli_num_rows($orderDetailResult) > 0){
+            $order_count = 0;
+            while($row = mysqli_fetch_assoc($orderDetailResult)){
+                $orders[] = $row;
+            }
+        } 
+        else {
+            echo "No correct redirection";
+            exit();
+        }
 
-    // }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -182,7 +182,7 @@
                                                     <?php echo date('M j, Y', strtotime($order['created_at'])); ?>
                                                 </td>
                                                 <td class="px-4 py-3 text-sm text-gray-900">
-                                                    $<?php echo number_format($order['total'], 2); ?>
+                                                    Rs. <?php echo number_format($order['total'], 2); ?>
                                                 </td>
                                                 <td class="px-4 py-3 text-sm">
                                                     <span class="px-2 py-1 text-xs font-semibold rounded-full 

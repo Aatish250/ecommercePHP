@@ -52,7 +52,7 @@
                     </td>
                     <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">${order.created_at ? (new Date(order.created_at)).toLocaleDateString() : ''}</td>
                     <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
-                        $${order.total}
+                        Rs.${order.total}
                         <a href="order-details.php?order_id=${order.order_id}" class="text-indigo-600 hover:text-indigo-900 text-sm mt-1 block">View Details</a>
                     </td>
                     <td class="px-4 py-4 whitespace-nowrap text-center">

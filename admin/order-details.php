@@ -178,11 +178,11 @@
                                     </div>
                                     <div class="text-center">
                                         <p class="text-sm text-gray-600">Unit Price</p>
-                                        <p class="font-semibold">$<?php echo number_format($item['order_price'], 2); ?></p>
+                                        <p class="font-semibold"><span class='text-md font-light text-gray-400'>Rs.</span><?php echo number_format($item['order_price'], 2); ?></p>
                                     </div>
                                     <div class="text-right">
                                         <p class="text-sm text-gray-600">Total</p>
-                                        <p class="font-semibold text-lg">$<?php echo number_format($item['sub_total'], 2); ?></p>
+                                        <p class="font-semibold text-lg"><span class='text-md font-light text-gray-400'>Rs.</span><?php echo number_format($item['sub_total'], 2); ?></p>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -194,7 +194,7 @@
                                 <div class="w-64 space-y-2">
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Subtotal:</span>
-                                        <span class="font-medium">$<?php echo number_format($order_spec['sum_sub_total'], 2); ?></span>
+                                        <span class="font-medium"><span class='text-md font-light text-gray-400'>Rs.</span><?php echo number_format($order_spec['sum_sub_total'], 2); ?></span>
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-gray-600">Shipping:</span>
@@ -204,7 +204,7 @@
                                     </div>
                                     <div class="flex justify-between text-lg font-semibold border-t pt-2">
                                         <span>Total:</span>
-                                        <span class="text-indigo-600">$<?php echo number_format($order['total'], 2); ?></span>
+                                        <span class="text-indigo-600"><span class='text-md font-light text-gray-400'>Rs.</span><?php echo number_format($order['total'], 2); ?></span>
                                     </div>
                                 </div>
                             </div>

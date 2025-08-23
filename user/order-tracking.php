@@ -68,9 +68,9 @@
                     <div class="space-y-2">
                         <p><span class="font-medium">Order ID:</span> #<?php echo $order_id;?></p>
                         <p><span class="font-medium">Order Date:</span><?php echo date('F j, Y', strtotime($order['created_at'])); ?></p>
-                        <p><span class="font-medium">Sub-Total:</span> $<?php echo $sum_sub_total;?></p>
+                        <p><span class="font-medium">Sub-Total:</span> Rs. <?php echo $sum_sub_total;?></p>
                         <p><span class="font-medium">Shipping Fee:</span> <?php echo $order['shipping_fee'] > 0 ? '$' . number_format($order['shipping_fee'], 2) : 'Free'; ?></p>
-                        <p><span class="font-medium">Total:</span> $<?php echo $order['total']; ?></p>
+                        <p><span class="font-medium">Total:</span> Rs. <?php echo $order['total']; ?></p>
                         <p><span class="font-medium">Status:</span>
                             <span class="px-2 py-1 text-xs font-semibold rounded-full 
                                 <?php
@@ -154,11 +154,11 @@
                         <div class="flex-1">
                             <h3 class="font-medium text-gray-800"><?php echo htmlspecialchars($item['product_name']); ?></h3>
                             <p class="text-gray-600">Quantity: <?php echo $item['quantity']; ?></p>
-                            <p class="text-gray-600">Price: $<?php echo number_format($item['order_price'], 2); ?></p>
+                            <p class="text-gray-600">Price: Rs. <?php echo number_format($item['order_price'], 2); ?></p>
                         </div>
                         <div class="text-right">
                             <p class="font-semibold text-gray-800">
-                                $<?php echo number_format($item['sub_total'], 2); ?>
+                                Rs.<?php echo number_format($item['sub_total'], 2); ?>
                             </p>
                         </div>
                     </div>
