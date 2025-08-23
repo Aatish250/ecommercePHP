@@ -17,9 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `ecom_db`
---
+CREATE DATABASE IF NOT EXISTS `ecom_db`;
+USE `ecom_db`;
 
 -- --------------------------------------------------------
 
