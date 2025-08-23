@@ -53,7 +53,7 @@ Checkout:
 <img src="../img/ss/user-checkout.png" alt="User Checkout Preview">
 
 Khalti Payment Gateway (KPG):  
-<img src="../img/ss/user-kpg.png" alt="User Khalti Payment Gateway Preview">
+<img src="../img/ss/user-KPG.png" alt="User Khalti Payment Gateway Preview">
 
 Order Confirmed:  
 <img src="../img/ss/user-order_confirmed.png" alt="User Order Confirmed Preview">
