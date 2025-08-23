@@ -20,10 +20,6 @@
                 $orders[] = $row;
             }
         } 
-        else {
-            echo "No correct redirection";
-            exit();
-        }
 
     }
 ?>
