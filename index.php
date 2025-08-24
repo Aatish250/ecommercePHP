@@ -174,15 +174,18 @@
 </head>
 
 <body class="bg-slate-200">
-    <nav class="absolute top-0 left-0 w-full bg-slate-100 flex justify-between items-center p-4 text-4xl z-10">
-        Logo
-    </nav>
+    <nav class="absolute top-0 left-0 w-full bg-slate-100">
     <div class="container flex flex-col justify-center items-center h-screen">
+        <div class="absolute inset-0 w-full h-full z-0">
+            <img src="img/logo/a2ztransparent.png" alt="Logo" class="w-full h-full object-cover opacity-60 blur-2xl">
+        </div>
         <!-- Login Form -->
         <form id="loginForm" method="POST"
-            class="bg-white py-4 px-8 rounded-lg w-90 flex flex-col md:w-92 shadow-lg <?php echo ($show_form !== 'login') ? 'hidden' : ''; ?><?php echo (!empty($login_error) || !empty($signup_success)) ? ' form-tight' : ' gap-2'; ?>">
+            class="bg-white py-4 px-8 rounded-lg w-90 flex flex-col md:w-92 shadow-lg z-2 <?php echo ($show_form !== 'login') ? 'hidden' : ''; ?><?php echo (!empty($login_error) || !empty($signup_success)) ? ' form-tight' : ' gap-2'; ?>">
             <input type="hidden" name="form_type" value="login">
-            <div class="text-center text-2xl font-bold py-3">Login</div>
+            <div class="flex justify-center items-center flex-col text-2xl font-bold">
+                <img src="img/logo/a2ztransparent.png" alt="Logo" class="h-30 p-2 -mb-8">
+            </div>
             <?php if (!empty($login_error)): ?>
                 <div class="text-red-500 text-center text-sm mb-2 form-message"><?php echo htmlspecialchars($login_error); ?></div>
             <?php elseif (!empty($signup_success)): ?>
@@ -241,9 +244,11 @@
         </script>
         <!-- Signup Form -->
         <form id="signupForm" method="POST"
-            class="bg-white py-4 px-8 rounded-lg w-90 flex flex-col md:w-92 shadow-lg <?php echo ($show_form !== 'signup') ? 'hidden' : ''; ?><?php echo (!empty($signup_error)) ? ' form-tight' : ' gap-2'; ?>">
+            class="bg-white py-4 px-8 rounded-lg w-90 flex flex-col md:w-92 shadow-lg z-2 <?php echo ($show_form !== 'signup') ? 'hidden' : ''; ?><?php echo (!empty($signup_error)) ? ' form-tight' : ' gap-2'; ?>">
             <input type="hidden" name="form_type" value="signup">
-            <div class="text-center text-2xl font-bold py-3">Signup</div>
+            <div class="flex justify-center items-center flex-col text-2xl font-bold">
+                <img src="img/logo/a2ztransparent.png" alt="Logo" class="h-30 p-2 -mb-8">
+            </div>
             <?php if (!empty($signup_error)): ?>
                 <div class="text-red-500 text-center text-sm mb-2 form-message"><?php echo htmlspecialchars($signup_error); ?></div>
             <?php endif; ?>
